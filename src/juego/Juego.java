@@ -10,36 +10,78 @@ public class Juego extends InterfaceJuego
 {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
+	private Islas [] islas;
+	private Gnomos [] gnomo;
 	
 	// Variables y métodos propios de cada grupo
 	// ...
 	
 	Juego()
 	{
-		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
-		
-		// Inicializar lo que haga falta para el juego
-		// ...
-
-		// Inicia el juego!
+		inicializarJuego();
 		this.entorno.iniciar();
 	}
-
-	/**
-	 * Durante el juego, el método tick() será ejecutado en cada instante y 
-	 * por lo tanto es el método más importante de esta clase. Aquí se debe 
-	 * actualizar el estado interno del juego para simular el paso del tiempo 
-	 * (ver el enunciado del TP para mayor detalle).
-	 */
-	public void tick()
-	{
-		// Procesamiento de un instante de tiempo
-		// ...
-		
-	}
 	
+	private void inicializarJuego() {
+	    gnomo = new Gnomos[1];     // Inicializa el array de gnomos
+	    double x = entorno.ancho() - 380;  // Definimos la posición inicial en el eje X para todos los gnomos
+	    double y = entorno.alto() - 560 ;    // Posición inicial en el eje Y
+	   
+	    // Generación de los gnomos (todos spawnean en la misma posición x)
+	    for (int i = 0; i < 1; i++) {
+	        gnomo[i] = new Gnomos(x, y, 10, 10, -1);  // Crea el gnomo en la posición (x, y)
+	    }
+	}
+	public void tick(){
+	    islas = new Islas[15]; //cantidad de islas   
+	    double xIslas = entorno.ancho() - 60;  
+	    double yIslas = entorno.alto() - 100;
+	    
+	    for (int i = 0; i <= 4; i++) { //crea las islas de abajo
+	        islas[i] = new Islas(xIslas, yIslas, 120, 40);
+	        xIslas -= 170;
+	    }
+	    xIslas = entorno.ancho() - 100;
+	    for (int i = 5; i <= 8; i++) { //segunda fila
+	        islas[i] = new Islas(xIslas, yIslas-120 , 120, 40);
+	        xIslas -= 200;
+	    } 
+	    xIslas = entorno.ancho() - 180;
+	    for (int i = 9; i <= 11; i++) { //tercera
+	        islas[i] = new Islas(xIslas, yIslas-240 , 120, 40);
+	        xIslas -= 230;
+	    } 
+	    xIslas = entorno.ancho() - 320;
+	    for (int i = 12; i <= 13; i++) { //cuarta
+	        islas[i] = new Islas(xIslas, yIslas-340 , 120, 40);
+	        xIslas -= 170;
+	    } 
+	    xIslas = entorno.ancho() / 2;
+	    for (int i = 14; i <= 14; i++) { //isla de arriba del todo
+	        islas[i] = new Islas(xIslas, yIslas-430 , 120, 40);
+	        xIslas -= 170;
+	    } 
+	
+    for (int i = 0; i < islas.length; i++) {
+        if (islas[i] != null) { 
+            islas[i].dibujarIslas(entorno);  
+        }
 
+            // Dibuja y mueve los gnomos
+        for (int j = 0; j < gnomo.length; j++) {
+            if (gnomo[j] != null) {
+                gnomo[j].dibujarGnomos(entorno);
+                gnomo[j].mover(entorno); // Primero se mueve el gnomo
+
+                // Verifica si el gnomo colisiona con alguna isla
+                if (!gnomo[j].colisionaAbajoGnomo(islas)) { //si no colisiona, cae
+                	gnomo[j].caer();             	
+            }
+    }
+        }
+		}
+	}
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{
