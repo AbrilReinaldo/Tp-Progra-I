@@ -1,6 +1,7 @@
 package juego;
 
 import java.awt.Color;
+import java.util.Random;
 
 import entorno.Entorno;
 
@@ -10,6 +11,7 @@ public class Gnomos {
 		private int ancho; 
 		private int alto; 
 		private int direccion;
+		private Random random = new Random();
 
 		public Gnomos(double x, double y, int ancho, int alto, int direccion) {
 		this.x = x;
@@ -22,6 +24,18 @@ public class Gnomos {
 			entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0 , Color.red);
 
 		}
+		
+		public int azar(Entorno entorno) {
+			return -1 + (2 * random.nextInt());
+				
+		}
+		//public void azar(Entorno entorno) {
+		//	if (Math.random() < 0.5) { 
+		 //       this.x -= 0.5* direccion;
+		//    } else {                                              //UNA FORMA DEL AZAR, HAY QUE MODIFICARLA PARA QUE ANDE BIEN
+		 //       this.x += 0.5* direccion;
+		  //  }
+		//}
 		public void mover(Entorno entorno) {
 		    // Movimiento horizontal
 		    if (direccion == -1) { 
@@ -33,6 +47,9 @@ public class Gnomos {
 		public void caer() {
 			this.y += 0.25; //la velocidad en la que baja en el eje y 
 		}
+		public void ubicacionGnomo() {
+			x += direccion;
+		}
 		
 		public boolean colisionaAbajoGnomo(Islas[] islas) {
 		    for (Islas isla : islas) {
@@ -41,14 +58,15 @@ public class Gnomos {
 		            this.y + this.alto / 2 >= isla.getY() - isla.getAlto() / 2 &&
 		            this.x + this.ancho / 2 >= isla.getX() - isla.getAncho() / 2 &&
 		            this.x - this.ancho / 2 <= isla.getX() + isla.getAncho() / 2) {
-		            System.out.println("Colisión detectada con isla en: " + isla.getX() + ", " + isla.getY()); //Lo puse para verificar que habia colision
+	             System.out.println("Colisión de gnomo detectada con isla en: " + isla.getX() + ", " + isla.getY()); //Lo puse para verificar que habia colision
 		            return true; // Hay colisión
 		        }
 		    }
 		    return false; // No hay colisión
-		}
-
-
+		}	
+			
+		
+		
 		public double getX() {
 			return x;
 		}
@@ -78,6 +96,14 @@ public class Gnomos {
 		}
 		public void setDireccion(int direccion) {
 			this.direccion = direccion;
+		}
+		public void cambioDireccion() {  //para que las tortugas ser mantengan en la misma isla
+			if (direccion == -1) { 
+				direccion = 1;
+		    } else if (direccion == 1) { 
+		    	direccion = -1;
+		    }
+	
 		}
 	}
 
