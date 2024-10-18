@@ -11,7 +11,12 @@ public class Gnomos {
 		private int ancho; 
 		private int alto; 
 		private int direccion;
+		private double bordeInferior;
+		private double bordeSuperior;
+		private double bordeIzq;
+		private double bordeDer;
 		private Random random = new Random();
+		private Boolean seCayo;
 
 		public Gnomos(double x, double y, int ancho, int alto, int direccion) {
 		this.x = x;
@@ -19,6 +24,11 @@ public class Gnomos {
 		this.ancho = ancho; 
 		this.alto = alto; 
 		this.direccion = direccion; 
+		this.bordeInferior= this.y + this.alto/2;
+		this.bordeSuperior= this.y - this.alto/2;
+		this.bordeIzq = this.x - this.ancho / 2;
+		this.bordeDer = this.x + this.ancho/2;
+		this.seCayo = false;
 	}
 		public void dibujarGnomos(Entorno entorno) {
 			entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0 , Color.red);
@@ -29,6 +39,13 @@ public class Gnomos {
 			return -1 + (2 * random.nextInt());
 				
 		}
+		public void actualizarBordes() {
+		    this.bordeInferior = this.y + this.alto / 2;
+		    this.bordeSuperior = this.y - this.alto / 2;
+		    this.bordeIzq = this.x - this.ancho / 2;
+		    this.bordeDer = this.x + this.ancho / 2;
+		}
+
 		//public void azar(Entorno entorno) {
 		//	if (Math.random() < 0.5) { 
 		 //       this.x -= 0.5* direccion;
@@ -38,14 +55,30 @@ public class Gnomos {
 		//}
 		public void mover(Entorno entorno) {
 		    // Movimiento horizontal
-		    if (direccion == -1) { 
-		        this.x -= 0.1;
-		    } else if (direccion == 1) { 
-		        this.x += 0.1;
+		    if (direccion == -1) {
+		        this.x -= 0.25;
+		    } else if (direccion == 1) {
+		        this.x += 0.25;
 		    }
+		    // Actualiza los bordes después de moverse
+		    actualizarBordes();
 		}
+		
+
 		public void caer() {
-			this.y += 0.25; //la velocidad en la que baja en el eje y 
+			this.y += 1; //la velocidad en la que baja en el eje y 
+			seCayo=true;
+		}
+		public void cambioDireccion() {  //para que las tortugas ser mantengan en la misma isla
+			if(seCayo) {
+			if (direccion == -1) { 
+				direccion = 1;
+		    } else if (direccion == 1) { 
+		    	direccion = -1;
+		    }
+			seCayo= false;
+			}
+	
 		}
 		public void ubicacionGnomo() {
 			x += direccion;
@@ -53,20 +86,21 @@ public class Gnomos {
 		
 		public boolean colisionaAbajoGnomo(Islas[] islas) {
 		    for (Islas isla : islas) {
-		        //colision que puso la profe el otro dia
-		    	if (isla != null && 
-		            this.y + this.alto / 2 >= isla.getY() - isla.getAlto() / 2 &&
-		            this.x + this.ancho / 2 >= isla.getX() - isla.getAncho() / 2 &&
-		            this.x - this.ancho / 2 <= isla.getX() + isla.getAncho() / 2) {
-	             System.out.println("Colisión de gnomo detectada con isla en: " + isla.getX() + ", " + isla.getY()); //Lo puse para verificar que habia colision
-		            return true; // Hay colisión
+		        if (isla != null) {
+		            // Verificar si el gnomo está horizontalmente alineado con la isla
+		            boolean colisionX = this.bordeDer >= isla.getBordeIzq() && 
+		                                this.bordeIzq <= isla.getBordeDer();
+		            // Verificar si la distancia entre el borde inferior del gnomo y el borde superior de la isla es pequeña
+		            boolean colisionY = Math.abs(this.bordeInferior - isla.getBordeSuperior()) < 1;
+		            // Si ambas condiciones se cumplen, hay colisión
+		            if (colisionX && colisionY) {
+		               // System.out.println("Colisión de gnomo detectada con isla en: " + isla.getX() + ", " + isla.getY());
+		                return true; // Hay colisión
+		            }
 		        }
 		    }
-		    return false; // No hay colisión
-		}	
-			
-		
-		
+		    return false; // No hay colisión		    			    
+		}
 		public double getX() {
 			return x;
 		}
@@ -97,14 +131,37 @@ public class Gnomos {
 		public void setDireccion(int direccion) {
 			this.direccion = direccion;
 		}
-		public void cambioDireccion() {  //para que las tortugas ser mantengan en la misma isla
-			if (direccion == -1) { 
-				direccion = 1;
-		    } else if (direccion == 1) { 
-		    	direccion = -1;
-		    }
-	
+		public double getBordeInferior() {
+			return bordeInferior;
 		}
+		public void setBordeInferior(double bordeInferior) {
+			this.bordeInferior = bordeInferior;
+		}
+		public double getBordeSuperior() {
+			return bordeSuperior;
+		}
+		public void setBordeSuperior(double bordeSuperior) {
+			this.bordeSuperior = bordeSuperior;
+		}
+		public double getBordeIzq() {
+			return bordeIzq;
+		}
+		public void setBordeIzq(double bordeIzq) {
+			this.bordeIzq = bordeIzq;
+		}
+		public double getBordeDer() {
+			return bordeDer;
+		}
+		public void setBordeDer(double bordeDer) {
+			this.bordeDer = bordeDer;
+		}
+		public Random getRandom() {
+			return random;
+		}
+		public void setRandom(Random random) {
+			this.random = random;
+		}
+		
 	}
 
 		

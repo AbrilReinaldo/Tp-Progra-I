@@ -9,12 +9,20 @@ public class Islas {
 	private double y; 
 	private double ancho; 
 	private double alto;
+	private double bordeInferior;
+	private double bordeSuperior;
+	private double bordeIzq;
+	private double bordeDer;
 	
 	public Islas(double x, double y, int ancho, int alto) {
 		this.x = x;
 		this.y = y; 
 		this.ancho = ancho;
 		this.alto = alto; 
+		this.bordeInferior= this.y + this.alto/2;
+		this.bordeSuperior= this.y - this.alto/2;
+		this.bordeIzq = this.x - this.ancho / 2;
+		this.bordeDer = this.x + this.ancho/2;
 	}
 
 	public void dibujarIslas(Entorno entorno) {
@@ -53,5 +61,38 @@ public class Islas {
 	public void setAlto(double alto) {
 		this.alto = alto;
 	}
+
+	public double getBordeInferior() {
+		return bordeInferior;
+	}
+
+	public void setBordeInferior(double bordeInferior) {
+		this.bordeInferior = bordeInferior;
+	}
+
+	public double getBordeSuperior() {
+		return bordeSuperior;
+	}
+
+	public void setBordeSuperior(double bordeSuperior) {
+		this.bordeSuperior = bordeSuperior;
+	}
+
+	public double getBordeIzq() {
+		return bordeIzq;
+	}
+
+	public void setBordeIzq(double bordeIzq) {
+		this.bordeIzq = bordeIzq;
+	}
+
+	public double getBordeDer() {
+		return bordeDer;
+	}
+
+	public void setBordeDer(double bordeDer) {
+		this.bordeDer = bordeDer;
+	}
+	
 	}
 	
