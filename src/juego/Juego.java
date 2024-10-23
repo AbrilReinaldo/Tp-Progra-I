@@ -14,6 +14,7 @@ public class Juego extends InterfaceJuego {
 	private Gnomos[] gnomo;
 	private Tortuga[] tortugas;
 	private Pep pep;
+	private Casa casa;
 	private Boolean puedeCaer = false;
 	private Boolean saltoCooldown= false;
 	private int timerSalto; // Temporizador para el cooldown del salto	
@@ -36,9 +37,11 @@ public class Juego extends InterfaceJuego {
 	}
 	
 	private void inicializarJuego() {
+		this.casa = new Casa(415, 85, 25, 30);
 		this.pep = new Pep(entorno.ancho() / 2, entorno.alto() - 160, 25, 40, 5);
 		tortugas = new Tortuga[2];
 	    gnomo = new Gnomos[6];     // Inicializa el array de gnomos
+	   
    
 	    double x = entorno.ancho() - 380;  // Definimos la posición inicial en el eje X para todos los gnomos
 	    double y = entorno.alto() - 515 ;    // Posición inicial en el eje Y
@@ -144,6 +147,8 @@ public class Juego extends InterfaceJuego {
             }
         }
         pep.dibujarPep(entorno);
+	    casa.dibujarCasa(entorno);
+
          
         
         
@@ -178,7 +183,7 @@ public class Juego extends InterfaceJuego {
                 }
             }
         } 
-        
+
  //LOGICA TORTUGAS
                        
         timerTortugas ++;

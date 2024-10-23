@@ -35,6 +35,8 @@ public class Gnomos {
 
 		}
 		
+
+		
 		public int azar(Entorno entorno) {
 			return -1 + (2 * random.nextInt());
 				
