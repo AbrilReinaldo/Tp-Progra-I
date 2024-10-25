@@ -1,6 +1,7 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Image;
 
 import entorno.Entorno;
 
@@ -10,24 +11,32 @@ public class DisparoPep {
 	private double ancho; 
 	private double alto;
 	private boolean derecha; // (true para derecha, false para izquierda)
+	private Image disparoDerecha; // Imagen para el disparo hacia la derecha
+    private Image disparoIzquierda;
 	
 	public DisparoPep(double x, double y, double ancho, double alto, boolean derecha) {
 		this.x = x; 
 		this.y = y; 
-		this.ancho = ancho; 
-		this.alto = alto; 
+		this.ancho = 5; 
+		this.alto = 5; 
 		this.derecha = derecha; 
+		this.disparoDerecha = Herramientas.cargarImagen("recursos/disparoDer.png");
+		this.disparoIzquierda = Herramientas.cargarImagen("recursos/disparoIzq.png");
 	}
 
 	public void dibujarDisparo(Entorno entorno) {
-		entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0, Color.cyan);
-	}
+		if (derecha && this.disparoDerecha != null) {
+            entorno.dibujarImagen(this.disparoDerecha, this.x, this.y, 0, this.ancho / 100.0); // Dibuja la imagen del disparo a la derecha
+        } else if (!derecha && this.disparoIzquierda != null) {
+            entorno.dibujarImagen(this.disparoIzquierda, this.x, this.y, 0, this.ancho / 100.0); // Dibuja la imagen del disparo a la izquierda
+        }
+    }
 	
 	public void mover() {
 		if (derecha) {
-			this.x += 11; // Mueve el disparo hacia la derecha
+			this.x += 5; // Mueve el disparo hacia la derecha
 		} else {
-			this.x -= 11; // Mueve el disparo hacia la izquierda
+			this.x -= 5; // Mueve el disparo hacia la izquierda
 		}
 	}
 	public boolean seFue(Entorno entorno) {

@@ -3,7 +3,6 @@ package juego;
 import java.awt.Image;
 import entorno.Entorno;
 
-import entorno.Entorno;
 public class Casa {
 	 private double x; 
 	 private double y;

@@ -14,7 +14,7 @@ public class Herramientas {
     public static Image cargarImagen(String archivo) {
         Image imagen = null;
         try {
-            imagen = ImageIO.read(new File(archivo));
+            imagen = ImageIO.read(new File(archivo)); //lee la imagen desde el archivo
         } catch (Exception e) {
             System.err.println("Error al cargar la imagen: " + archivo);
             e.printStackTrace();
@@ -26,7 +26,7 @@ public class Herramientas {
         try {
             File audioFile = new File(filePath);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();  //obtiene un clip de audio que se puede reproducir
             clip.open(audioInputStream);
             System.out.println("Sonido cargado correctamente"); // Mensaje de depuración
         } catch (Exception e) {
