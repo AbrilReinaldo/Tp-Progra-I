@@ -10,6 +10,7 @@ import java.util.Random;
 public class Juego extends InterfaceJuego {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
+	private Herramientas sonido; // Declaración de la clase Sonido
 	private Islas[] islas;
 	private Gnomos[] gnomo;
 	private Tortuga[] tortugas;
@@ -32,13 +33,15 @@ public class Juego extends InterfaceJuego {
  	
 	Juego() {
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
-		inicializarJuego();
-		this.entorno.iniciar();
-	}
+        this.sonido = new Herramientas("recursos/musica_fondo.aiff"); // Inicializa la clase Sonido con la ruta del archivo
+        this.sonido.loop(); // Inicia la música en loop
+        inicializarJuego();
+        this.entorno.iniciar();
+    }
 	
 	private void inicializarJuego() {
 		this.casa = new Casa(415, 85, 25, 30);
-		this.pep = new Pep(entorno.ancho() / 2, entorno.alto() - 160, 25, 40, 5);
+		this.pep = new Pep(entorno.ancho() / 2, entorno.alto() - 160, 25, 40, 3);
 		tortugas = new Tortuga[2];
 	    gnomo = new Gnomos[6];     // Inicializa el array de gnomos
 	   
@@ -99,11 +102,12 @@ public class Juego extends InterfaceJuego {
             pep.moverDerecha(entorno);
             derecha = true;
         	pep.setDireccion(1);  // Actualiza la dirección del personaje (para disparo)
-        }
-        if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
+        }else if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
         	pep.setDireccion(-1); 
         	derecha = false;
             pep.moverIzquierda();
+        } else {
+            pep.setDireccion(0); // Establecer dirección a 0 cuando este parado
         }
 		if(pep != null && entorno.sePresiono(entorno.TECLA_ESPACIO)) {
 			if(disparo == null) {

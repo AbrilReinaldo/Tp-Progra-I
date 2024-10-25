@@ -2,7 +2,7 @@ package juego;
 
 import java.awt.Color;
 import java.util.Random;
-
+import java.awt.Image;
 import entorno.Entorno;
 
 public class Gnomos {
@@ -17,6 +17,8 @@ public class Gnomos {
 		private double bordeDer;
 		private Random random = new Random();
 		private Boolean seCayo;
+		private Image imagenIzquierda; // Variable para la imagen del gnomo izq
+		private Image imagenDerecha;
 
 		public Gnomos(double x, double y, int ancho, int alto, int direccion) {
 		this.x = x;
@@ -29,10 +31,15 @@ public class Gnomos {
 		this.bordeIzq = this.x - this.ancho / 2;
 		this.bordeDer = this.x + this.ancho/2;
 		this.seCayo = false;
+		this.imagenIzquierda = Herramientas.cargarImagen("recursos/gnomoIzq.png"); // Carga la imagen
+		this.imagenDerecha = Herramientas.cargarImagen("recursos/gnomoder.png");
 	}
 		public void dibujarGnomos(Entorno entorno) {
-			entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0 , Color.red);
-
+			if (this.direccion == 1) { // Derecha
+		        entorno.dibujarImagen(this.imagenDerecha, this.x, this.y, 0, 0.07);
+		    } else { // Izquierda
+		        entorno.dibujarImagen(this.imagenIzquierda, this.x, this.y, 0, 0.07);
+		    }
 		}
 		
 

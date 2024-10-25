@@ -1,7 +1,7 @@
 package juego;
 
-import java.awt.Color;
 
+import java.awt.Image;
 import entorno.Entorno;
 
 public class Pep {
@@ -11,6 +11,10 @@ public class Pep {
     private int alto; 
     private int desplazamiento;
     private int direccion;
+    private Image imagenParado; //  imagen de Pep parado 
+    private Image imagenDerecha; // Imagen de Pep moviéndose a la derecha
+    private Image imagenIzquierda; // Imagen de Pep moviéndose a la izquierda
+
 
     public Pep(double x, double y, int ancho, int alto, int desplazamiento) {
         this.x = x;
@@ -19,11 +23,22 @@ public class Pep {
         this.alto = alto; 
         this.desplazamiento = desplazamiento; 
         this.direccion = 1;
+        this.imagenParado = Herramientas.cargarImagen("recursos/golemParado.png"); // Carga la imagen de Pep
+        this.imagenDerecha = Herramientas.cargarImagen("recursos/golemDer.png");
+        this.imagenIzquierda = Herramientas.cargarImagen("recursos/golemizq.png");
     }
 
     public void dibujarPep(Entorno entorno) {
-        entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0 , Color.blue);
+    	// Si Pep se está moviendo a la derecha
+    	if (this.direccion == 1) {
+            entorno.dibujarImagen(this.imagenDerecha, this.x, this.y, 0, 0.04); // Imagen para la derecha
+        } else if (this.direccion == -1) {
+            entorno.dibujarImagen(this.imagenIzquierda, this.x, this.y, 0, 0.04); // Imagen para la izquierda
+        } else {
+            entorno.dibujarImagen(this.imagenParado, this.x, this.y, 0, 0.12); // Imagen para parado
+        }
     }
+    
 
     public void moverDerecha(Entorno e) {
         if (this.x + this.ancho / 2 < e.ancho()) {

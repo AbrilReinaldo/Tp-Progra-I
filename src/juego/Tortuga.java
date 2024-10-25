@@ -1,6 +1,7 @@
 package juego;
 
-import java.awt.Color;
+import java.awt.Image;
+import entorno.Entorno;
 import java.util.Random;
 
 import entorno.Entorno;
@@ -18,6 +19,8 @@ public class Tortuga {
 		private double bordeIzq;
 		private double bordeDer;
 	    private Boolean seCayo;
+	    private Image tortugaDerecha; 
+	    private Image tortugaIzquierda; 
 	    
 	    
 		public Tortuga (double x, double y, int ancho, int alto, int direccion) {
@@ -31,10 +34,15 @@ public class Tortuga {
 		this.bordeIzq = this.x - this.ancho / 2;
 		this.bordeDer = this.x + this.ancho/2;
 		this.seCayo = false;
+		this.tortugaDerecha = Herramientas.cargarImagen("recursos/tortugaDer.png");
+		this.tortugaIzquierda = Herramientas.cargarImagen("recursos/tortugaIzq.png");
 	}
 		public void dibujarTortugas(Entorno entorno) {
-			entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0 , Color.green);
-
+			if (this.direccion == 1) { // Derecha
+	            entorno.dibujarImagen(this.tortugaDerecha, this.x, this.y, 0, 0.12); // Dibuja la imagen hacia la derecha
+	        } else { // Izquierda
+	            entorno.dibujarImagen(this.tortugaIzquierda, this.x, this.y, 0, 0.12); // Dibuja la imagen hacia la izquierda
+	        }
 		}
 
 		public void mover(Entorno entorno) { 
