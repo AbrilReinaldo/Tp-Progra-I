@@ -31,12 +31,12 @@ public class Pep {
         this.alto = alto; 
         this.desplazamiento = desplazamiento; 
         this.direccion = 1;
-        this.imagenParado = Herramientas.cargarImagen("recursos/golemParado.png");
-        this.imagenDerecha = Herramientas.cargarImagen("recursos/golemDer.png");
-        this.imagenIzquierda = Herramientas.cargarImagen("recursos/gnomoIzq.png");
-        this.img1 = Herramientas.cargarImagen("recursos/uno.png");
-        this.img2 = Herramientas.cargarImagen("recursos/dos.png");
-        this.img3 = Herramientas.cargarImagen("recursos/tres.png");
+        this.imagenParado = Herramientas.cargarImagen("golemParado.png");
+        this.imagenDerecha = Herramientas.cargarImagen("golemDer.png");
+        this.imagenIzquierda = Herramientas.cargarImagen("golemIzq.png");
+        this.img1 = Herramientas.cargarImagen("uno.png");
+        this.img2 = Herramientas.cargarImagen("dos.png");
+        this.img3 = Herramientas.cargarImagen("tres.png");
     }
 
     public void dibujarPep(Entorno entorno) {
@@ -120,18 +120,18 @@ public class Pep {
 		entorno.dibujarImagen(imagenDerecha, entorno.ancho() - 60, 75, 0, 0.045);
 		// Dibuja la cantidad de vidas restantes según el valor de la variable "vidas"
 		if (vidas == 3) {
-			entorno.dibujarImagen(img3, entorno.ancho() - 20, 77, 0, 0.045);
+			entorno.dibujarImagen(this.img1, entorno.ancho(),77, 0, 0.045);
 		}
 		if (vidas == 2) {
-			entorno.dibujarImagen(img2, entorno.ancho() - 20, 77, 0, 0.045);
+			entorno.dibujarImagen(this.img2, entorno.ancho() - 20, 77, 0, 0.045);
 		}
 		if (vidas == 1) {
-			entorno.dibujarImagen(img1, entorno.ancho() - 20, 77, 0, 0.045);
+			entorno.dibujarImagen(this.img1, entorno.ancho() - 20, 77, 0, 0.045);
 		}
 	}
 	
 	public void mostrarPuntaje(Entorno entorno) {
-		entorno.cambiarFont("Arial", 25, Color.cyan); // Cambia la fuente y el color del texto
+		entorno.cambiarFont("Arial", 25, Color.white); // Cambiar la fuente y el color del texto
 		entorno.escribirTexto("Pep's", entorno.ancho() - 120, entorno.alto() - 70); // Muestra el nombre del jugador
 		entorno.escribirTexto("Points: " + puntaje, entorno.ancho() - 120, entorno.alto() - 40); // Muestra el puntaje del jugador
 		entorno.escribirTexto("Kills: " + kills, entorno.ancho() - 120, entorno.alto() - 10); // Muestra el número de muertes del jugador

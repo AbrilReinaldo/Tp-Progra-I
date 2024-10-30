@@ -23,8 +23,8 @@ public class DisparoPep {
 		this.ancho = 5; 
 		this.alto = 5; 
 		this.derecha = derecha; 
-		this.disparoDerecha = Herramientas.cargarImagen("recursos/disparoDer.png");
-		this.disparoIzquierda = Herramientas.cargarImagen("recursos/disparoIzq.png");
+		this.disparoDerecha = Herramientas.cargarImagen("disparoDer.png");
+		this.disparoIzquierda = Herramientas.cargarImagen("disparoIzq.png");
 	}
 
 	public void dibujarDisparo(Entorno entorno) {

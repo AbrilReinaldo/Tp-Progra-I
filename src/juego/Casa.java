@@ -17,7 +17,7 @@ public Casa(double x, double y, int ancho, int alto) {
 	        this.y = y; 
 	        this.ancho = ancho; 
 	        this.alto = alto; 
-	        this.imagenCasa = Herramientas.cargarImagen("recursos/casa.png");
+	        this.imagenCasa = Herramientas.cargarImagen("casa.png");
 }
 	 
 public void dibujarCasa(Entorno entorno) {

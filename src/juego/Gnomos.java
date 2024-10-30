@@ -32,8 +32,8 @@ public class Gnomos {
 		this.bordeIzq = this.x - this.ancho / 2;
 		this.bordeDer = this.x + this.ancho/2;
 		this.seCayo = false;
-		this.imagenIzquierda = Herramientas.cargarImagen("recursos/gnomoIzq.png"); // Carga la imagen
-		this.imagenDerecha = Herramientas.cargarImagen("recursos/gnomoder.png");
+		this.imagenIzquierda = Herramientas.cargarImagen("gnomoIzq.png"); // Carga la imagen
+		this.imagenDerecha = Herramientas.cargarImagen("gnomoder.png");
 	}
 		public void dibujarGnomos(Entorno entorno) {
 			if (this.direccion == 1) { // Derecha
