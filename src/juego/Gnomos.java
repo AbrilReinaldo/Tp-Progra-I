@@ -56,13 +56,7 @@ public class Gnomos {
 		this.bordeDer = this.x + this.ancho / 2;
 	}
 
-	// public void azar(Entorno entorno) {
-	// if (Math.random() < 0.5) {
-	// this.x -= 0.5* direccion;
-	// } else { //UNA FORMA DEL AZAR, HAY QUE MODIFICARLA PARA QUE ANDE BIEN
-	// this.x += 0.5* direccion;
-	// }
-	// }
+
 	public void mover(Entorno entorno) {
 		// Movimiento horizontal
 		if (direccion == -1) {

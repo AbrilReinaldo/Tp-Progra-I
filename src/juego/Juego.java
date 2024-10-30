@@ -10,6 +10,7 @@ import java.awt.Image;
 public class Juego extends InterfaceJuego {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
+	//private Menu menu;
 	private Herramientas sonido; // Declaración de la clase Sonido
 	private Islas[] islas;
 	private Gnomos[] gnomo;
@@ -35,18 +36,21 @@ public class Juego extends InterfaceJuego {
 	int indicePosiciones = 0;
 	private boolean cooldownVidas;
 	private int timerVidas = 0;
-	private Image fondo;
+	private Image fondo,menu;
+	private boolean juegoIniciado = false;
 	
 	Juego() {
-	    this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
 	    this.sonido = new Herramientas("recursos/musica_fondo.aiff"); 
 	    this.sonido.loop(); // Inicia la música en loop
 	    inicializarJuego();
 	    this.entorno.iniciar();
+
 	}
 
 
 	private void inicializarJuego() {
+		//this.menu = new Menu(415, 85, 800, 600);
 		this.casa = new Casa(415, 85, 25, 30);
 		this.pep = new Pep(entorno.ancho() / 2, entorno.alto() - 160, 25, 40, 3);
 		tortugas = new Tortuga[4];
@@ -84,11 +88,22 @@ public class Juego extends InterfaceJuego {
 		cooldownVidas = false;
 		timerVidas = 0;
 		fondo = Herramientas.cargarImagen("recursos/fondo.jpg");
-	}
-
-	public void tick() {
-		entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0, 1);
+		menu = Herramientas.cargarImagen("recursos/menu.png");
 		
+	}
+ 
+	public void tick() {
+		if (!juegoIniciado) {
+            entorno.dibujarImagen(menu, entorno.ancho() / 2, entorno.alto() / 2 , 0, 1);
+            if(entorno.mouseX()>=305 && entorno.mouseX()<=495 && entorno.mouseY()>=420  && entorno.mouseY()<=500 )//si el mouse esta ubicado en el boton
+            	if(entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {//si el click del mouse fue apretado
+                  juegoIniciado = true; // Inicia el juego si se presiona el espacio
+            }
+            return; 
+        }
+
+        entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+        
 		if (pep.getVidas() <= 0) {
 			pep.mostrarGameOver(entorno);
 			return;
@@ -308,9 +323,9 @@ public class Juego extends InterfaceJuego {
 		        }
 		    }
 		}
-
-
-		}
+	 }
+		              
+	
 
 
 	@SuppressWarnings("unused")

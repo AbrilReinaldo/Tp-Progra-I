@@ -97,8 +97,8 @@ public class Tortuga {
 				// Verificar si Pep está justo sobre la isla
 				if (tortugaBordeInferior >= islaBordeSuperior && tortugaBordeInferior <= islaBordeSuperior + 10
 						&& colisionX) {
-					System.out
-							.println("Colisión de Tortuga detectada con isla en: " + isla.getX() + ", " + isla.getY());
+					//System.out
+							//.println("Colisión de Tortuga detectada con isla en: " + isla.getX() + ", " + isla.getY());
 					return true; // Hay colisión
 				}
 			}

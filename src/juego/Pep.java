@@ -87,6 +87,8 @@ public class Pep {
 				if (pepBordeInferior >= islaBordeSuperior && pepBordeInferior <= islaBordeSuperior + 10 && colisionX) {
 					// System.out.println("Colisión de Pep detectada con isla en: " + isla.getX() +
 					// ", " + isla.getY());
+					System.out
+					.println("Colisión de Pep detectada con isla en: " + isla.getX() + ", " + isla.getY());
 					return true; // Hay colisión
 				}
 			}
