@@ -15,6 +15,7 @@ public class Pep {
 	private Image imagenParado; // imagen de Pep parado
 	private Image imagenDerecha; // Imagen de Pep moviéndose a la derecha
 	private Image imagenIzquierda; // Imagen de Pep moviéndose a la izquierda
+	private Image imagenSaltando; // Imagen de Pep saltando
 	private Image img1; // Imagen para representar una vida
 	private Image img2; // Imagen para representar una vida
 	private Image img3; // Imagen para representar una vida
@@ -22,6 +23,7 @@ public class Pep {
 	private int kills = 0; // Número de enemigos eliminados
 	private int vidas = 3;
 	private int rescates = 0;
+	private boolean saltar = false;
 
 	public Pep(double x, double y, int ancho, int alto, int desplazamiento) {
 		this.x = x;
@@ -33,6 +35,7 @@ public class Pep {
 		this.imagenParado = Herramientas.cargarImagen("golemParado.png");
 		this.imagenDerecha = Herramientas.cargarImagen("golemDer.png");
 		this.imagenIzquierda = Herramientas.cargarImagen("golemIzq.png");
+		this.imagenSaltando = Herramientas.cargarImagen("golemsaltando.png");
 		this.img1 = Herramientas.cargarImagen("uno.png");
 		this.img2 = Herramientas.cargarImagen("dos.png");
 		this.img3 = Herramientas.cargarImagen("tres.png");
@@ -46,6 +49,9 @@ public class Pep {
 			entorno.dibujarImagen(this.imagenIzquierda, this.x, this.y, 0, 0.04); // Imagen para la izquierda
 		} else {
 			entorno.dibujarImagen(this.imagenParado, this.x, this.y, 0, 0.12); // Imagen para parado
+		}
+		if (saltar) {
+			entorno.dibujarImagen(this.imagenSaltando, this.x, this.y, 0, 0.12); // Imagen para parado
 		}
 	}
 
@@ -64,6 +70,8 @@ public class Pep {
 	// Nuevo método para el salto
 	public void saltar() {
 		y -= 5;
+		saltar= true;	
+
 	}
 
 	public void caer() {
@@ -87,8 +95,9 @@ public class Pep {
 				if (pepBordeInferior >= islaBordeSuperior && pepBordeInferior <= islaBordeSuperior + 10 && colisionX) {
 					// System.out.println("Colisión de Pep detectada con isla en: " + isla.getX() +
 					// ", " + isla.getY());
-					System.out
-					.println("Colisión de Pep detectada con isla en: " + isla.getX() + ", " + isla.getY());
+				//	System.out
+					//.println("Colisión de Pep detectada con isla en: " + isla.getX() + ", " + isla.getY());
+					saltar= false;
 					return true; // Hay colisión
 				}
 			}
