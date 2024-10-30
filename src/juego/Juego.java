@@ -129,11 +129,11 @@ public class Juego extends InterfaceJuego {
 		}
 
 		// Movimiento lateral
-		if (entorno.estaPresionada(entorno.TECLA_DERECHA)) {
+		if (entorno.estaPresionada('d') || entorno.estaPresionada(entorno.TECLA_DERECHA)) {
 			pep.moverDerecha(entorno);
 			derecha = true;
 			pep.setDireccion(1); // Actualiza la dirección del personaje (para disparo)
-		} else if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
+		} else if (entorno.estaPresionada('a') || entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
 			pep.setDireccion(-1);
 			derecha = false;
 			pep.moverIzquierda();
@@ -142,7 +142,7 @@ public class Juego extends InterfaceJuego {
 		}
 
 		// Disparo
-		if (pep != null && entorno.sePresiono(entorno.TECLA_ESPACIO)) {
+		if ( entorno.estaPresionada('w') || entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) || entorno.sePresiono(entorno.TECLA_ESPACIO )) {
 			if (disparo == null) {
 				disparo = new DisparoPep(pep.getX(), pep.getY(), 10, 10, this.derecha);
 			}
@@ -156,7 +156,7 @@ public class Juego extends InterfaceJuego {
 		}
 
 		// Salto
-		if (entorno.sePresiono(entorno.TECLA_ARRIBA) && puedeSaltar && !saltoCooldown) {
+		if (entorno.estaPresionada('d') || entorno.sePresiono(entorno.TECLA_ARRIBA) && puedeSaltar && !saltoCooldown) {
 			estaSaltando = true;
 			puedeSaltar = false;
 			saltoMaxY = pep.getY() - 100; // Altura máxima del salto
