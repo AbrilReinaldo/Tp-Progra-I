@@ -1,3 +1,4 @@
+
 package juego;
 
 import javax.imageio.ImageIO;

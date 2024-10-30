@@ -1,11 +1,12 @@
 package juego;
 
-
 import java.awt.Color;
 
 import entorno.Entorno;
 import entorno.InterfaceJuego;
 import java.util.Random;
+import java.awt.Image;
+
 
 public class Juego extends InterfaceJuego {
 	// El objeto Entorno que controla el tiempo y otros
@@ -29,8 +30,15 @@ public class Juego extends InterfaceJuego {
     private int timerTortugas = 0;
     private int tiempoSpawnTortugas = 300;
 	private Boolean estaCayendo = false;
+	private DisparoPep disparoPep; // Disparo de Mario
+	private int tortugasVivas = 4;
+	double[] posicionesPermitidasX = new double[12];
+	int indicePosiciones = 0;
+	private boolean cooldownVidas;
+	private int timerVidas = 0;
+	private Image pepDer;
+	private Image calavera;
     
- 	
 	Juego() {
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
         this.sonido = new Herramientas("recursos/musica_fondo.aiff"); // Inicializa la clase Sonido con la ruta del archivo
@@ -42,7 +50,7 @@ public class Juego extends InterfaceJuego {
 	private void inicializarJuego() {
 		this.casa = new Casa(415, 85, 25, 30);
 		this.pep = new Pep(entorno.ancho() / 2, entorno.alto() - 160, 25, 40, 3);
-		tortugas = new Tortuga[2];
+		tortugas = new Tortuga[4];
 	    gnomo = new Gnomos[6];     // Inicializa el array de gnomos
 	   
    
@@ -64,6 +72,7 @@ public class Juego extends InterfaceJuego {
 	            xIslas += desplazamientoXPorNivel[nivel]; // Desplaza la posición de la siguiente isla
 	            cantIslas++; // Incrementa el índice de las islas
 	        }
+	        
 	    }	   	    
 	   //otras variables 
 	    gnomo[0]=new Gnomos(x,y,10,10,1);
@@ -74,6 +83,9 @@ public class Juego extends InterfaceJuego {
 	    derecha = false;
 	    disparo = null;
 	    derecha = true;
+	    tortugasVivas = 4;
+	    cooldownVidas = false;
+	    timerVidas = 0;
 	}
 	
     public void tick() {
@@ -84,6 +96,8 @@ public class Juego extends InterfaceJuego {
             }
         }
 
+        
+       
         // Chequea si Pep está tocando una isla
         if (pep != null && pep.colisionaAbajoPep(islas)) {
             puedeCaer = false;
@@ -149,6 +163,42 @@ public class Juego extends InterfaceJuego {
                 saltoCooldown = false;
                 timerSalto = 0; //reinicia el timer
             }
+         // Verifica si Pep pierde vidas por varias condiciones: colisión con Rex, bombas, caer por debajo de cierta altura, etc.
+            if (pep != null && (pep.colisionaTortuga(tortugas) || pep.getY() > 600 )
+                    && pep.getVidas() >= 1 && !cooldownVidas) {
+                
+                pep.setVidas(pep.getVidas() - 1);  // Reduce las vidas de Pep
+                pep.setY(entorno.alto() - 70);     // Reposiciona a Pep en Y
+                pep.setX(entorno.ancho() / 2 + 50); // Reposiciona a Pep en X
+                cooldownVidas = true;               // Activa el cooldown para evitar perder vidas continuamente
+            }
+
+            // Cooldown para evitar perder todas las vidas instantáneamente
+            if (cooldownVidas) {
+                timerVidas += 1;  // Incrementa el temporizador de las vidas
+                if (timerVidas == 100) { // Espera 100 ticks antes de permitir la pérdida de otra vida
+                    timerVidas = 0;  // Reinicia el temporizador
+                    cooldownVidas = false;  // Finaliza el cooldown
+                }
+            }
+
+            // Si Pep pierde todas las vidas, se elimina
+            if (pep != null && pep.getVidas() == 0) {
+                pep = null;  // Elimina a Pep del juego si no le quedan vidas
+            }
+    		// Si Mario está presente, muestra sus vidas, puntaje y lo dibuja en el entorno
+    		if (pep != null) {
+    			pep.vidas(entorno); // Muestra las vidas de Mario
+    			pep.mostrarPuntaje(entorno); // Muestra el puntaje de Mario
+    			pep.dibujarPep(entorno); // Dibuja a Mario en el entorno
+    		} else {
+    			// Si Mario no está presente, muestra la imagen de Mario y una calavera en su lugar
+    			pepDer = Herramientas.cargarImagen("recursos/golemDer.png");
+    			entorno.dibujarImagen(pepDer, entorno.ancho() - 60, 75, 0, 0.045); // Dibuja la imagen de Mario
+    			calavera = Herramientas.cargarImagen("recursos/calavera.png");
+    			entorno.dibujarImagen(calavera, entorno.ancho() - 20, 75, 0, 0.075); // Dibuja la calavera
+    		}
+    
         }
         pep.dibujarPep(entorno);
 	    casa.dibujarCasa(entorno);
@@ -158,6 +208,7 @@ public class Juego extends InterfaceJuego {
         
         
 // LOGICA GNOMOS
+	    
         timerGnomos++;
         if (timerGnomos >= 400 && gnomosVivos < 6) {
             for (int i = 0; i < gnomo.length; i++) {
@@ -188,35 +239,64 @@ public class Juego extends InterfaceJuego {
             }
         } 
 
- //LOGICA TORTUGAS
-                       
-        timerTortugas ++;
-        if(timerTortugas >= tiempoSpawnTortugas) {
-            for (int i = 0; i < tortugas.length; i++) {
-                if (tortugas[i] == null) { // si hay espacio disponible
-                    double xAleatorio = Math.random() * (entorno.ancho() - 30); 
-                    double yInicial = entorno.alto() - 550; 
-                    tortugas[i] = new Tortuga(xAleatorio, yInicial, 30, 30, 1); 
-                    System.out.println("Tortuga creada en posición X: " + xAleatorio);
-                    return; 
+     // LOGICA TORTUGAS
+        timerTortugas++;
+        if (timerTortugas >= tiempoSpawnTortugas) {
+            // Lista de posiciones X válidas donde las islas están ubicadas
+            double[] posicionesIslasX = new double[islas.length];
+            int contador = 0;
+
+            // Recopila las posiciones X de las islas
+            for (Islas isla : islas) {
+                if (isla != null) {
+                    posicionesIslasX[contador++] = isla.getX();
                 }
             }
-            timerTortugas = 0; // Resetea el temporizador
-        }      
-       
+
+            if (contador > 0) { // Verifica que hay islas disponibles
+                int indiceAleatorio = (int) (Math.random() * contador); // Selecciona un índice aleatorio
+                double xAleatorio = posicionesIslasX[indiceAleatorio]; // Obtiene la posición X de la isla seleccionada
+                double yInicial = entorno.alto() - 400; // Altura fija para la tortuga
+
+                // Verifica que no aparezca cerca de la casa
+                if (Math.abs(xAleatorio - casa.getX()) > 50) {
+                    for (int i = 0; i < tortugas.length; i++) {
+                        if (tortugas[i] == null) { // si hay espacio disponible
+                            tortugas[i] = new Tortuga(xAleatorio, yInicial, 30, 30, 1); 
+                            System.out.println("Tortuga creada en posición X: " + xAleatorio + ", Y: " + yInicial);
+                            return; // Sale del bucle de generación
+                        }
+                    }
+                }
+            }
+            
+            timerTortugas = 0; // Reinicia el temporizador después de intentar crear una tortuga
+        }
         for (int j = 0; j < tortugas.length; j++) {
             if (tortugas[j] != null) {
-                tortugas[j].dibujarTortugas(entorno);
-                tortugas[j].mover(entorno);
-                if (!tortugas[j].colisionaAbajoTortuga(islas)) {
-                	tortugas[j].caer();
-                }
+                tortugas[j].dibujarTortugas(entorno); // Dibuja la tortuga
+
+                // Si colisiona con una isla
                 if (tortugas[j].colisionaAbajoTortuga(islas)) {
-                	tortugas[j].cambioDireccion();
+                    tortugas[j].mover(islas); // Mueve la tortuga lateralmente si está en una isla
+                } else {
+                    tortugas[j].caer(); // Si no colisiona con una isla, sigue cayendo
+                }
+            }
+            // Comprobar colisión con el disparo
+            
+                if (disparo != null && tortugas[j].colisionaDisparoPep(disparo)) {
+                    tortugasVivas--;           // Reduce el contador de tortugas vivas
+                    tortugas[j] = null;         // Elimina la tortuga que fue impactada por el disparo
+                    disparo = null;             // Elimina el disparo para que no continúe
+
+                    if (pep != null) {          // Si el personaje existe, incrementa su contador de kills
+                        pep.incrementarKills();
+                    }
+                    return; // Sale del ciclo para que no se verifiquen más colisiones en este ciclo
                 }
             }
         }
-	}
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {

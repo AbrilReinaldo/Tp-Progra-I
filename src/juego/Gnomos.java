@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.Random;
 import java.awt.Image;
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Gnomos {
 		private double x; 
