@@ -29,7 +29,7 @@ public class Herramientas {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
 			clip = AudioSystem.getClip(); // obtiene un clip de audio que se puede reproducir
 			clip.open(audioInputStream);
-			System.out.println("Sonido cargado correctamente"); // Mensaje de depuración
+			System.out.println("Sonido cargado correctamente"); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

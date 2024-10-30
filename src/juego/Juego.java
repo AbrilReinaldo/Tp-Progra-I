@@ -38,11 +38,13 @@ public class Juego extends InterfaceJuego {
 	private int timerVidas = 0;
 	private Image fondo,menu, gameOver;
 	private boolean juegoIniciado = false;
+	private Tiempo tiempo;
 	
 	Juego() {
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
-	  //  this.sonido = new Herramientas("recursos/musica_fondo.aiff"); 
-	   // this.sonido.loop(); // Inicia la música en loop
+	   // this.sonido = new Herramientas("recursos/musica_fondo.aiff"); 
+	    //this.sonido.loop(); // Inicia la música en loop
+		this.tiempo = new Tiempo(entorno); // Inicializa el tiempo
 	    inicializarJuego();
 	    this.entorno.iniciar();
 
@@ -104,6 +106,7 @@ public class Juego extends InterfaceJuego {
         }
 
         entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+        tiempo.dibujarTiempo();
         
 		if (pep.getVidas() <= 0) {
 			entorno.dibujarImagen(gameOver, entorno.ancho() / 2, entorno.alto() / 2 , 0, 1);
@@ -114,6 +117,7 @@ public class Juego extends InterfaceJuego {
 			//pep.mostrarGameOver(entorno);
 			return;
 		}
+		
 		// Dibujar las islas
 		for (int i = 0; i < islas.length; i++) {
 			if (islas[i] != null) {
