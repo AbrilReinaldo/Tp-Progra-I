@@ -142,7 +142,7 @@ public class Juego extends InterfaceJuego {
 		}
 
 		// Disparo
-		if ( entorno.estaPresionada('w') || entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) || entorno.sePresiono(entorno.TECLA_ESPACIO )) {
+		if ( entorno.estaPresionada('c') || entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) || entorno.sePresiono(entorno.TECLA_ESPACIO )) {
 			if (disparo == null) {
 				disparo = new DisparoPep(pep.getX(), pep.getY(), 10, 10, this.derecha);
 			}
@@ -156,7 +156,7 @@ public class Juego extends InterfaceJuego {
 		}
 
 		// Salto
-		if (entorno.estaPresionada('d') || entorno.sePresiono(entorno.TECLA_ARRIBA) && puedeSaltar && !saltoCooldown) {
+		if (entorno.estaPresionada('w') || entorno.sePresiono(entorno.TECLA_ARRIBA) && puedeSaltar && !saltoCooldown) {
 			estaSaltando = true;
 			puedeSaltar = false;
 			saltoMaxY = pep.getY() - 100; // Altura máxima del salto
