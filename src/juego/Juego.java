@@ -166,7 +166,7 @@ public class Juego extends InterfaceJuego {
 		}
 
 		// Salto
-		if (entorno.estaPresionada('w') || entorno.sePresiono(entorno.TECLA_ARRIBA) && puedeSaltar && !saltoCooldown) {
+		if (entorno.sePresiono('w') || entorno.sePresiono(entorno.TECLA_ARRIBA) && puedeSaltar && !saltoCooldown) {
 			estaSaltando = true;
 			puedeSaltar = false;
 			saltoMaxY = pep.getY() - 100; // Altura máxima del salto
@@ -226,7 +226,7 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 
-		if (pep.colisionaGnomo(gnomo) != null) { // Si hay un gnomo rescatado
+		if (pep.colisionaGnomo(gnomo) != null && pep.pepPuedeSalvar() ) { // Si hay un gnomo rescatado
 		    pep.incrementarRescates(); // Incrementa los rescates
 		    // Borra el gnomo rescatado de la lista
 		    for (int i = 0; i < gnomo.length; i++) {

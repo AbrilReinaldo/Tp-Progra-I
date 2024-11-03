@@ -104,7 +104,14 @@ public class Pep {
 		}
 		return false; // No hay colisión
 	}
-
+	
+	public boolean pepPuedeSalvar() { //para que pep no pueda salvar gnomos en las primeras tres islas
+		if (this.y >= 200) {
+			return true;
+		}
+		return false;
+	}
+	
 	public void incrementarKills() {
 		this.kills++; // Incrementa en 1 el contador de muertes
 	}
@@ -166,10 +173,10 @@ public class Pep {
 																										// jugador
 	}
 
-	public void mostrarGameOver(Entorno entorno) {
-		entorno.cambiarFont("Arial", 25, Color.white);
-		entorno.escribirTexto("GAME OVER", entorno.ancho() - 480, entorno.alto() / 2);
-	}
+	//public void mostrarGameOver(Entorno entorno) {
+	//	entorno.cambiarFont("Arial", 25, Color.white);
+	//	entorno.escribirTexto("GAME OVER", entorno.ancho() - 480, entorno.alto() / 2);
+	//}
 
 	public double getX() {
 		return x;
