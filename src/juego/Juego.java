@@ -89,9 +89,11 @@ public class Juego extends InterfaceJuego {
 		tortugasVivas = 0;
 		cooldownVidas = false;
 		timerVidas = 0;
+		tiempo = new Tiempo(entorno);
 		fondo = Herramientas.cargarImagen("recursos/fondo.jpg");
 		menu = Herramientas.cargarImagen("recursos/menu.png");
 		gameOver = Herramientas.cargarImagen("recursos/gameOver.png");
+		
 		
 	}
  

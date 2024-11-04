@@ -106,7 +106,7 @@ public class Pep {
 	}
 	
 	public boolean pepPuedeSalvar() { //para que pep no pueda salvar gnomos en las primeras tres islas
-		if (this.y >= 200) {
+		if (this.y >= 300) {
 			return true;
 		}
 		return false;
