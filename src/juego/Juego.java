@@ -14,6 +14,7 @@ public class Juego extends InterfaceJuego {
 	private Herramientas sonido; // Declaración de la clase Sonido
 	private Islas[] islas;
 	private Gnomos[] gnomo;
+	private int ContGnomosPerdidos = 0;  // Contador para gnomos muertos/caídos
 	private Gnomos[] gnomoDorado;
 	private Tortuga[] tortugas;
 	private Pep pep;
@@ -99,7 +100,12 @@ public class Juego extends InterfaceJuego {
 		gameOver = Herramientas.cargarImagen("recursos/gameOver.png");
 		
 	}
- 
+	
+	public void mostrarPerdidos(Entorno entorno) { //Muestra la cantidad de gnomos perdidos durante el juego
+	    entorno.cambiarFont("Arial", 25, Color.white);  
+	    entorno.escribirTexto("Gnomos perdidos: " + ContGnomosPerdidos, entorno.ancho() - 263, entorno.alto() - 70);
+	}
+
 	public void tick() {
 		if (!juegoIniciado) {
             entorno.dibujarImagen(menu, entorno.ancho() / 2, entorno.alto() / 2 , 0, 1);
@@ -314,6 +320,7 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
+		mostrarPerdidos(entorno);
 		// Spawneo de tortugas
 		timerTortugas++;
 		if (timerTortugas >= tiempoSpawnTortugas && tortugasVivas < tortugas.length) {
@@ -372,11 +379,13 @@ public class Juego extends InterfaceJuego {
 		             // Elimina el gnomo que fue impactado por la tortuga
 		             for (int k = 0; k < gnomoDorado.length; k++) {
 		                 if (gnomoDorado[k] == gnomoDoradoColisionado ) {
-		                     gnomoDorado[k] = null; // Elimina el gnomo que colisionó
+		                	 ContGnomosPerdidos++; //incrementa si un gnomo colisiona con la tortuga
+		                	 gnomoDorado[k] = null; // Elimina el gnomo que colisionó
 		                     break; // Sale del bucle una vez que se elimina el gnomo
 		                 }
 		             }
 		         }
+		         
 		        
 		         // Comprobar colisión con gnomos
 		         Gnomos gnomoColisionado = tortugas[j].colisionaConGnomo(gnomo);
@@ -384,13 +393,23 @@ public class Juego extends InterfaceJuego {
 		             // Elimina el gnomo que fue impactado por la tortuga
 		             for (int k = 0; k < gnomo.length; k++) {
 		                 if (gnomo[k] == gnomoColisionado ) {
-		                     gnomo[k] = null; // Elimina el gnomo que colisionó
+		                	 ContGnomosPerdidos++; //incrementa si un gnomo colisiona con la tortuga
+		                	 gnomo[k] = null; // Elimina el gnomo que colisionó
 		                     break; // Sale del bucle una vez que se elimina el gnomo
 		                 }
 		             }
 		          }
+		         //comprobrar si el gnomo esta fuera de pantalla
+		         for (int i = 0; i < gnomo.length; i++) {
+		        	    if (gnomo[i] != null) { // Si el gnomo existe
+		        	        // Verificar si el gnomo ha salido de la pantalla
+		        	        if (gnomo[i].getY() > entorno.alto()) { // Si el gnomo está por debajo de la pantalla
+		        	            ContGnomosPerdidos++;  // Incrementar el contador de gnomos perdidos
+		        	            gnomo[i] = null;  // Eliminar el gnomo de la pantalla (o de la lista)
+		        	        }
+		        	 
 		    }
-		    }}
+		    }}}}
 }
 		              
 	

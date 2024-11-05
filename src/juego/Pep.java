@@ -163,7 +163,7 @@ public class Pep {
 
 	public void mostrarKills(Entorno entorno) {
 		entorno.cambiarFont("Arial", 25, Color.white); // Cambiar la fuente y el color del texto
-		entorno.escribirTexto("Pep", entorno.ancho() - 120, entorno.alto() - 70); // Muestra el nombre del jugador
+		//entorno.escribirTexto("Pep", entorno.ancho() - 120, entorno.alto() - 70); // Muestra el nombre del jugador
 		entorno.escribirTexto("Kills: " + kills, entorno.ancho() - 120, entorno.alto() - 10); // Muestra el número de
 																								// muertes del jugador
 	}
