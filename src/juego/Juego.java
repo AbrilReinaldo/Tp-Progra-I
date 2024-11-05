@@ -4,17 +4,16 @@ import java.awt.Color;
 
 import entorno.Entorno;
 import entorno.InterfaceJuego;
-import java.util.Random;
 import java.awt.Image;
 
 public class Juego extends InterfaceJuego {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
-	//private Menu menu;
+	// private Menu menu;
 	private Herramientas sonido; // Declaración de la clase Sonido
 	private Islas[] islas;
 	private Gnomos[] gnomo;
-	private int ContGnomosPerdidos = 0;  // Contador para gnomos muertos/caídos
+	private int ContGnomosPerdidos = 0; // Contador para gnomos muertos/caídos
 	private Gnomos[] gnomoDorado;
 	private Tortuga[] tortugas;
 	private Pep pep;
@@ -33,30 +32,27 @@ public class Juego extends InterfaceJuego {
 	private int gnomosVivosDorados = 0;
 	private int timerTortugas = 0;
 	private int tiempoSpawnTortugas = 300;
-	private Boolean estaCayendo = false;
-	private DisparoPep disparoPep; // Disparo de Mario
 	private int tortugasVivas = 4;
 	double[] posicionesPermitidasX = new double[12];
 	int indicePosiciones = 0;
 	private boolean cooldownVidas;
 	private int timerVidas = 0;
-	private Image fondo,menu, gameOver;
+	private Image fondo, menu, gameOver;
 	private boolean juegoIniciado = false;
 	private Tiempo tiempo;
-	
+
 	Juego() {
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
-	    this.sonido = new Herramientas("recursos/musica_fondo.aiff"); 
-	    this.sonido.loop(); // Inicia la música en loop
+		this.sonido = new Herramientas("recursos/musica_fondo.aiff");
+		this.sonido.loop(); // Inicia la música en loop
 		this.tiempo = new Tiempo(entorno); // Inicializa el tiempo
-	    inicializarJuego();
-	    this.entorno.iniciar();
+		inicializarJuego();
+		this.entorno.iniciar();
 
 	}
 
-
 	private void inicializarJuego() {
-		//this.menu = new Menu(415, 85, 800, 600);
+		// this.menu = new Menu(415, 85, 800, 600);
 		this.casa = new Casa(415, 85, 25, 30);
 		this.pep = new Pep(entorno.ancho() / 2, entorno.alto() - 160, 25, 40, 3);
 		tortugas = new Tortuga[4];
@@ -98,37 +94,39 @@ public class Juego extends InterfaceJuego {
 		fondo = Herramientas.cargarImagen("recursos/fondo.jpg");
 		menu = Herramientas.cargarImagen("recursos/menu.png");
 		gameOver = Herramientas.cargarImagen("recursos/gameOver.png");
-		
+
 	}
-	
-	public void mostrarPerdidos(Entorno entorno) { //Muestra la cantidad de gnomos perdidos durante el juego
-	    entorno.cambiarFont("Arial", 25, Color.white);  
-	    entorno.escribirTexto("Gnomos perdidos: " + ContGnomosPerdidos, entorno.ancho() - 263, entorno.alto() - 70);
+
+	public void mostrarPerdidos(Entorno entorno) { // Muestra la cantidad de gnomos perdidos durante el juego
+		entorno.cambiarFont("Arial", 25, Color.white);
+		entorno.escribirTexto("Gnomos perdidos: " + ContGnomosPerdidos, entorno.ancho() - 263, entorno.alto() - 70);
 	}
 
 	public void tick() {
 		if (!juegoIniciado) {
-            entorno.dibujarImagen(menu, entorno.ancho() / 2, entorno.alto() / 2 , 0, 1);
-            if(entorno.mouseX()>=305 && entorno.mouseX()<=495 && entorno.mouseY()>=420  && entorno.mouseY()<=500 )//si el mouse esta ubicado en el boton
-            	if(entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {//si el click del mouse fue apretado
-                  juegoIniciado = true; // Inicia el juego si se presiona el espacio
-            }
-            return; 
-        }
-
-        entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
-        tiempo.dibujarTiempo();
-        
-		if (pep.getVidas() <= 0) {
-			entorno.dibujarImagen(gameOver, entorno.ancho() / 2, entorno.alto() / 2 , 0, 1);
-			if(entorno.mouseX()>=240 && entorno.mouseX()<=560 && entorno.mouseY()>=550  && entorno.mouseY()<=580 )//si el mouse esta ubicado en el boton
-            	if(entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {//si el click del mouse fue apretado
-            	    inicializarJuego();// Inicia el juego si se presiona el espacio
-            }
-			//pep.mostrarGameOver(entorno);
+			entorno.dibujarImagen(menu, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+			if (entorno.mouseX() >= 305 && entorno.mouseX() <= 495 && entorno.mouseY() >= 420
+					&& entorno.mouseY() <= 500)// si el mouse esta ubicado en el boton
+				if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {// si el click del mouse fue apretado
+					juegoIniciado = true; // Inicia el juego si se presiona el espacio
+				}
 			return;
 		}
-		
+
+		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+		tiempo.dibujarTiempo();
+
+		// Verifica que pep este vivo, si no esta, pasa a la pantalla de GameOver
+		if (pep == null) {
+			entorno.dibujarImagen(gameOver, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+			if (entorno.mouseX() >= 240 && entorno.mouseX() <= 560 && entorno.mouseY() >= 550
+					&& entorno.mouseY() <= 580)// si el mouse esta ubicado en el boton
+				if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {// si el click del mouse fue apretado
+					inicializarJuego();// Inicia el juego si se presiona el espacio
+				}
+			return;
+		}
+
 		// Dibujar las islas
 		for (int i = 0; i < islas.length; i++) {
 			if (islas[i] != null) {
@@ -163,7 +161,8 @@ public class Juego extends InterfaceJuego {
 		}
 
 		// Disparo
-		if ( entorno.estaPresionada('c') || entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) || entorno.sePresiono(entorno.TECLA_ESPACIO )) {
+		if (entorno.estaPresionada('c') || entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
+				|| entorno.sePresiono(entorno.TECLA_ESPACIO)) {
 			if (disparo == null) {
 				disparo = new DisparoPep(pep.getX(), pep.getY(), 10, 10, this.derecha);
 			}
@@ -222,11 +221,15 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
+		// Pep vidas por caida
 		if (pep != null && pep.getY() > entorno.alto()) {
 			pep.setVidas(pep.getVidas() - 1); // Reduce una vida
 			if (pep.getVidas() > 0) {
 				pep.setX(entorno.ancho() / 2);
 				pep.setY(entorno.alto() - 160);
+			}
+			if (pep.getVidas() <= 0) {
+				pep = null; // Si pierde todas las vidas, se elimina a Pep
 			}
 		}
 
@@ -237,29 +240,30 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 
-		if (pep.colisionaGnomo(gnomo) != null && pep.pepPuedeSalvar() ) { // Si hay un gnomo rescatado
-		    pep.incrementarRescates(); // Incrementa los rescates
-		    // Borra el gnomo rescatado de la lista
-		    for (int i = 0; i < gnomo.length; i++) {
-		        if (gnomo[i] == pep.colisionaGnomo(gnomo)) {
-		            gnomo[i] = null; // Borra el gnomo rescatado
-		            return; // Sale del bucle una vez que lo ha encontrado
-		        }
-		    }
+		if (pep.colisionaGnomo(gnomo) != null && pep.pepPuedeSalvar()) { // Si hay un gnomo rescatado
+			pep.incrementarRescates(); // Incrementa los rescates
+			// Borra el gnomo rescatado de la lista
+			for (int i = 0; i < gnomo.length; i++) {
+				if (gnomo[i] == pep.colisionaGnomo(gnomo)) {
+					gnomo[i] = null; // Borra el gnomo rescatado
+					return; // Sale del bucle una vez que lo ha encontrado
+				}
+			}
 		}
-		//pep coalicion con gnomo dorado
-		if (pep.colisionaGnomo(gnomoDorado) != null && pep.pepPuedeSalvar() ) { // 
-			//cantidad maxima de vidas que puede tener: 4
-			if(pep.getVidas() <= 3) {
-			  pep.setVidas(pep.getVidas() + 1); // aumenta una vida
-			  cooldownVidas = true;
-			  timerVidas = 0;
-			} 
+		// pep coalicion con gnomo dorado
+		if (pep.colisionaGnomo(gnomoDorado) != null && pep.pepPuedeSalvar()) { //
+			// cantidad maxima de vidas que puede tener: 4
+			if (pep.getVidas() <= 3) {
+				pep.setVidas(pep.getVidas() + 1); // aumenta una vida
+				cooldownVidas = true;
+				timerVidas = 0;
+			}
 			for (int i = 0; i < gnomoDorado.length; i++) {
-		        if (gnomoDorado[i] == pep.colisionaGnomo(gnomoDorado)) {
-		            gnomoDorado[i] = null; // Borra el gnomo
-		            return; // Sale del bucle una vez que lo ha encontrado
-		        }}
+				if (gnomoDorado[i] == pep.colisionaGnomo(gnomoDorado)) {
+					gnomoDorado[i] = null; // Borra el gnomo
+					return; // Sale del bucle una vez que lo ha encontrado
+				}
+			}
 		}
 		// Spawneo de gnomos
 		timerGnomos++;
@@ -268,7 +272,7 @@ public class Juego extends InterfaceJuego {
 				if (gnomo[i] == null) {
 					double x = entorno.ancho() - 380;
 					double y = entorno.alto() - 505;
-					gnomo[i] = new Gnomos(x, y, 10, 10,1);
+					gnomo[i] = new Gnomos(x, y, 10, 10, 1);
 					gnomosVivos++;
 					timerGnomos = 0;
 					System.out.println("Gnomo creado en posición " + i);
@@ -276,23 +280,23 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
-		
+
 		// Spawneo de gnomosDorados
-				timerGnomosD++;
-				if (timerGnomosD >= 1000 && gnomosVivosDorados < 3) {
-					for (int i = 0; i < gnomo.length; i++) {
-						if (gnomoDorado[i] == null) {
-							double x = entorno.ancho() - 380;
-							double y = entorno.alto() - 505;
-							gnomoDorado[i] = new Gnomos(x, y, 10, 10,1);
-							gnomosVivosDorados++;
-							timerGnomosD = 0;
-							//System.out.println("Gnomo creado en posición " + i);
-							return;
-						}
-					}
+		timerGnomosD++;
+		if (timerGnomosD >= 1000 && gnomosVivosDorados < 3) {
+			for (int i = 0; i < gnomo.length; i++) {
+				if (gnomoDorado[i] == null) {
+					double x = entorno.ancho() - 380;
+					double y = entorno.alto() - 505;
+					gnomoDorado[i] = new Gnomos(x, y, 10, 10, 1);
+					gnomosVivosDorados++;
+					timerGnomosD = 0;
+					// System.out.println("Gnomo creado en posición " + i);
+					return;
 				}
-				
+			}
+		}
+
 		// Movimiento de gnomos
 		for (int j = 0; j < gnomo.length; j++) {
 			if (gnomo[j] != null) {
@@ -353,67 +357,66 @@ public class Juego extends InterfaceJuego {
 		}
 
 		for (int j = 0; j < tortugas.length; j++) {
-		    if (tortugas[j] != null) {
-		        tortugas[j].dibujarTortugas(entorno);
+			if (tortugas[j] != null) {
+				tortugas[j].dibujarTortugas(entorno);
 
-		        // Mueve la tortuga si colisiona con una isla, de lo contrario cae
-		        if (tortugas[j].colisionaAbajoTortuga(islas)) {
-		            tortugas[j].mover(islas);
-		        } else {
-		            tortugas[j].caer();
-		        }
+				// Mueve la tortuga si colisiona con una isla, de lo contrario cae
+				if (tortugas[j].colisionaAbajoTortuga(islas)) {
+					tortugas[j].mover(islas);
+				} else {
+					tortugas[j].caer();
+				}
 
-		        // Comprobar colisión con el disparo
-		        if (disparo != null && tortugas[j].colisionaDisparoPep(disparo)) {
-		            tortugasVivas--;
-		            tortugas[j] = null; // Elimina la tortuga que fue impactada
-		            disparo = null; // Elimina el disparo
-		            if (pep != null) {
-		                pep.incrementarKills();
-		            }
-		        }
-		        if (tortugas[j] != null) {
-		         // Comprobar colisión con gnomos dorados
-		         Gnomos gnomoDoradoColisionado = tortugas[j].colisionaConGnomo(gnomoDorado);
-		         if (gnomoDoradoColisionado != null) {
-		             // Elimina el gnomo que fue impactado por la tortuga
-		             for (int k = 0; k < gnomoDorado.length; k++) {
-		                 if (gnomoDorado[k] == gnomoDoradoColisionado ) {
-		                	 ContGnomosPerdidos++; //incrementa si un gnomo colisiona con la tortuga
-		                	 gnomoDorado[k] = null; // Elimina el gnomo que colisionó
-		                     break; // Sale del bucle una vez que se elimina el gnomo
-		                 }
-		             }
-		         }
-		         
-		        
-		         // Comprobar colisión con gnomos
-		         Gnomos gnomoColisionado = tortugas[j].colisionaConGnomo(gnomo);
-		         if (gnomoColisionado != null) {
-		             // Elimina el gnomo que fue impactado por la tortuga
-		             for (int k = 0; k < gnomo.length; k++) {
-		                 if (gnomo[k] == gnomoColisionado ) {
-		                	 ContGnomosPerdidos++; //incrementa si un gnomo colisiona con la tortuga
-		                	 gnomo[k] = null; // Elimina el gnomo que colisionó
-		                     break; // Sale del bucle una vez que se elimina el gnomo
-		                 }
-		             }
-		          }
-		         //comprobrar si el gnomo esta fuera de pantalla
-		         for (int i = 0; i < gnomo.length; i++) {
-		        	    if (gnomo[i] != null) { // Si el gnomo existe
-		        	        // Verificar si el gnomo ha salido de la pantalla
-		        	        if (gnomo[i].getY() > entorno.alto()) { // Si el gnomo está por debajo de la pantalla
-		        	            ContGnomosPerdidos++;  // Incrementar el contador de gnomos perdidos
-		        	            gnomo[i] = null;  // Eliminar el gnomo de la pantalla (o de la lista)
-		        	        }
-		        	 
-		    }
-		    }}}}
-}
-		              
-	
+				// Comprobar colisión con el disparo
+				if (disparo != null && tortugas[j].colisionaDisparoPep(disparo)) {
+					tortugasVivas--;
+					tortugas[j] = null; // Elimina la tortuga que fue impactada
+					disparo = null; // Elimina el disparo
+					if (pep != null) {
+						pep.incrementarKills();
+					}
+				}
+				if (tortugas[j] != null) {
+					// Comprobar colisión con gnomos dorados
+					Gnomos gnomoDoradoColisionado = tortugas[j].colisionaConGnomo(gnomoDorado);
+					if (gnomoDoradoColisionado != null) {
+						// Elimina el gnomo que fue impactado por la tortuga
+						for (int k = 0; k < gnomoDorado.length; k++) {
+							if (gnomoDorado[k] == gnomoDoradoColisionado) {
+								ContGnomosPerdidos++; // incrementa si un gnomo colisiona con la tortuga
+								gnomoDorado[k] = null; // Elimina el gnomo que colisionó
+								break; // Sale del bucle una vez que se elimina el gnomo
+							}
+						}
+					}
 
+					// Comprobar colisión con gnomos
+					Gnomos gnomoColisionado = tortugas[j].colisionaConGnomo(gnomo);
+					if (gnomoColisionado != null) {
+						// Elimina el gnomo que fue impactado por la tortuga
+						for (int k = 0; k < gnomo.length; k++) {
+							if (gnomo[k] == gnomoColisionado) {
+								ContGnomosPerdidos++; // incrementa si un gnomo colisiona con la tortuga
+								gnomo[k] = null; // Elimina el gnomo que colisionó
+								break; // Sale del bucle una vez que se elimina el gnomo
+							}
+						}
+					}
+					// comprobrar si el gnomo esta fuera de pantalla
+					for (int i = 0; i < gnomo.length; i++) {
+						if (gnomo[i] != null) { // Si el gnomo existe
+							// Verificar si el gnomo ha salido de la pantalla
+							if (gnomo[i].getY() > entorno.alto()) { // Si el gnomo está por debajo de la pantalla
+								ContGnomosPerdidos++; // Incrementar el contador de gnomos perdidos
+								gnomo[i] = null; // Eliminar el gnomo de la pantalla (o de la lista)
+							}
+
+						}
+					}
+				}
+			}
+		}
+	}
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {

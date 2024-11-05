@@ -2,10 +2,6 @@ package juego;
 
 import java.awt.Image;
 import entorno.Entorno;
-import java.util.Random;
-
-import entorno.Entorno;
-//import entorno.Herramientas;
 
 public class Tortuga {
 	private double x;
@@ -13,16 +9,8 @@ public class Tortuga {
 	private int ancho;
 	private int alto;
 	private double direccion;
-	private double bordeInferior;
-	private double bordeSuperior;
-	private double bordeIzq;
-	private double bordeDer;
-	private Boolean seCayo;
 	private Image tortugaDerecha;
 	private Image tortugaIzquierda;
-	private Boolean sobreIsla;
-	private double velocidad;
-	private boolean haCambiadoDireccion;
 
 	public Tortuga(double x, double y, int ancho, int alto, double direccion) {
 		this.x = x;
@@ -30,15 +18,8 @@ public class Tortuga {
 		this.ancho = ancho;
 		this.alto = alto;
 		this.direccion = direccion;
-		this.bordeInferior = this.y + this.alto / 2;
-		this.bordeSuperior = this.y - this.alto / 2;
-		this.bordeIzq = this.x - this.ancho / 2;
-		this.bordeDer = this.x + this.ancho / 2;
-		this.seCayo = false;
 		this.tortugaDerecha = Herramientas.cargarImagen("recursos/tortugaDer.png");
 		this.tortugaIzquierda = Herramientas.cargarImagen("recursos/tortugaIzq.png");
-		this.velocidad = 0.5;
-		this.haCambiadoDireccion = false;
 	}
 
 	public void dibujarTortugas(Entorno entorno) {
@@ -97,31 +78,30 @@ public class Tortuga {
 				// Verificar si Pep está justo sobre la isla
 				if (tortugaBordeInferior >= islaBordeSuperior && tortugaBordeInferior <= islaBordeSuperior + 10
 						&& colisionX) {
-					//System.out
-							//.println("Colisión de Tortuga detectada con isla en: " + isla.getX() + ", " + isla.getY());
+					// System.out
+					// .println("Colisión de Tortuga detectada con isla en: " + isla.getX() + ", " +
+					// isla.getY());
 					return true; // Hay colisión
 				}
 			}
 		}
 		return false; // No hay colisión
 	}
-	
+
 	public Gnomos colisionaConGnomo(Gnomos[] gnomo) {
-	    for (Gnomos g : gnomo) {
-	        if (g != null && this.y + this.alto / 2 - 25 <= g.getY() + g.getAlto() / 2
-	                && this.y - this.alto / 2 + 30 >= g.getY() - g.getAlto() / 2
-	                && this.x - this.ancho / 2 + 10 <= g.getX() + g.getAncho() / 2
-	                && this.x + this.ancho / 2 - 10 >= g.getX() - g.getAncho() / 2) {
-	            return g; // Retorna el gnomo con el que colisiona
-	        }
-	    }
-	    return null; // Retorna null si no hay colisión
+		for (Gnomos g : gnomo) {
+			if (g != null && this.y + this.alto / 2 - 25 <= g.getY() + g.getAlto() / 2
+					&& this.y - this.alto / 2 + 30 >= g.getY() - g.getAlto() / 2
+					&& this.x - this.ancho / 2 + 10 <= g.getX() + g.getAncho() / 2
+					&& this.x + this.ancho / 2 - 10 >= g.getX() - g.getAncho() / 2) {
+				return g; // Retorna el gnomo con el que colisiona
+			}
+		}
+		return null; // Retorna null si no hay colisión
 	}
-	
 
 	public void caer() {
 		this.y += 5; // la velocidad en la que baja en el eje y
-		seCayo = true;
 	}
 
 	public boolean colisionaDisparoPep(DisparoPep d) {

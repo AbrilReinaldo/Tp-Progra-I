@@ -1,7 +1,5 @@
 package juego;
 
-import java.awt.Color;
-import java.awt.Color; 
 import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -30,7 +28,8 @@ public class Islas {
 	}
 
 	public void dibujarIslas(Entorno entorno) {
-		//entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0, Color.white);
+		// entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0,
+		// Color.white);
 		entorno.dibujarImagen(imgIslas, this.x, this.y, 0, 2);
 	}
 

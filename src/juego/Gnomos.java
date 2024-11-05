@@ -1,6 +1,5 @@
 package juego;
 
-import java.awt.Color;
 import java.util.Random;
 import java.awt.Image;
 import entorno.Entorno;
@@ -47,7 +46,7 @@ public class Gnomos {
 			entorno.dibujarImagen(this.imagenIzquierda, this.x, this.y, 0, 0.07);
 		}
 	}
-	
+
 	public void dibujarGnomosDorados(Entorno entorno) {
 		if (this.direccion == 1) { // Derecha
 			entorno.dibujarImagen(this.DoradoImagenDerecha, this.x, this.y, 0, 0.07);
@@ -55,7 +54,7 @@ public class Gnomos {
 			entorno.dibujarImagen(this.DoradoImagenIzquierda, this.x, this.y, 0, 0.07);
 		}
 	}
-	
+
 	public int azar(Entorno entorno) {
 		return -1 + (2 * random.nextInt());
 
@@ -67,7 +66,6 @@ public class Gnomos {
 		this.bordeIzq = this.x - this.ancho / 2;
 		this.bordeDer = this.x + this.ancho / 2;
 	}
-
 
 	public void mover(Entorno entorno) {
 		// Movimiento horizontal
@@ -86,13 +84,12 @@ public class Gnomos {
 	}
 
 	public void cambioDireccion() {
-	    if (seCayo) {
-	        // Cambiar la dirección aleatoriamente
-	        direccion = (Math.random() < 0.5) ? -1 : 1; // Aleatoriamente -1 o 1
-	        seCayo = false; // Reinicia el estado de caída
-	    }
+		if (seCayo) {
+			// Cambiar la dirección aleatoriamente
+			direccion = (Math.random() < 0.5) ? -1 : 1; // Aleatoriamente -1 o 1
+			seCayo = false; // Reinicia el estado de caída
+		}
 	}
-
 
 	public void ubicacionGnomo() {
 		x += direccion;

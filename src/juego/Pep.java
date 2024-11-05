@@ -72,7 +72,7 @@ public class Pep {
 	// Nuevo método para el salto
 	public void saltar() {
 		y -= 5;
-		saltar= true;	
+		saltar = true;
 
 	}
 
@@ -97,23 +97,24 @@ public class Pep {
 				if (pepBordeInferior >= islaBordeSuperior && pepBordeInferior <= islaBordeSuperior + 10 && colisionX) {
 					// System.out.println("Colisión de Pep detectada con isla en: " + isla.getX() +
 					// ", " + isla.getY());
-					//System.out
-					//.println("Colisión de Pep detectada con isla en: " + isla.getX() + ", " + isla.getY());
-					saltar= false;
+					// System.out
+					// .println("Colisión de Pep detectada con isla en: " + isla.getX() + ", " +
+					// isla.getY());
+					saltar = false;
 					return true; // Hay colisión
 				}
 			}
 		}
 		return false; // No hay colisión
 	}
-	
-	public boolean pepPuedeSalvar() { //para que pep no pueda salvar gnomos en las primeras tres islas
+
+	public boolean pepPuedeSalvar() { // para que pep no pueda salvar gnomos en las primeras tres islas
 		if (this.y >= 300) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public void incrementarKills() {
 		this.kills++; // Incrementa en 1 el contador de muertes
 	}
@@ -131,17 +132,16 @@ public class Pep {
 	}
 
 	public Gnomos colisionaGnomo(Gnomos[] gnomo) {
-	    for (Gnomos g : gnomo) {
-	        if (g != null && this.y + this.alto / 2 - 25 <= g.getY() + g.getAlto() / 2
-	                && this.y - this.alto / 2 + 30 >= g.getY() - g.getAlto() / 2
-	                && this.x - this.ancho / 2 + 10 <= g.getX() + g.getAncho() / 2
-	                && this.x + this.ancho / 2 - 10 >= g.getX() - g.getAncho() / 2) {
-	            return g; // Retorna el gnomo con el que colisiona
-	        }
-	    }
-	    return null; // Retorna null si no hay colisión
+		for (Gnomos g : gnomo) {
+			if (g != null && this.y + this.alto / 2 - 25 <= g.getY() + g.getAlto() / 2
+					&& this.y - this.alto / 2 + 30 >= g.getY() - g.getAlto() / 2
+					&& this.x - this.ancho / 2 + 10 <= g.getX() + g.getAncho() / 2
+					&& this.x + this.ancho / 2 - 10 >= g.getX() - g.getAncho() / 2) {
+				return g; // Retorna el gnomo con el que colisiona
+			}
+		}
+		return null; // Retorna null si no hay colisión
 	}
-
 
 	public void vidas(Entorno entorno) {
 		// Dibuja la imagen de Mario en la esquina superior derecha de la pantalla
@@ -163,7 +163,8 @@ public class Pep {
 
 	public void mostrarKills(Entorno entorno) {
 		entorno.cambiarFont("Arial", 25, Color.white); // Cambiar la fuente y el color del texto
-		//entorno.escribirTexto("Pep", entorno.ancho() - 120, entorno.alto() - 70); // Muestra el nombre del jugador
+		// entorno.escribirTexto("Pep", entorno.ancho() - 120, entorno.alto() - 70); //
+		// Muestra el nombre del jugador
 		entorno.escribirTexto("Kills: " + kills, entorno.ancho() - 120, entorno.alto() - 10); // Muestra el número de
 																								// muertes del jugador
 	}
@@ -178,10 +179,11 @@ public class Pep {
 																										// jugador
 	}
 
-	//public void mostrarGameOver(Entorno entorno) {
-	//	entorno.cambiarFont("Arial", 25, Color.white);
-	//	entorno.escribirTexto("GAME OVER", entorno.ancho() - 480, entorno.alto() / 2);
-	//}
+	// public void mostrarGameOver(Entorno entorno) {
+	// entorno.cambiarFont("Arial", 25, Color.white);
+	// entorno.escribirTexto("GAME OVER", entorno.ancho() - 480, entorno.alto() /
+	// 2);
+	// }
 
 	public double getX() {
 		return x;
