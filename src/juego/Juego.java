@@ -45,8 +45,8 @@ public class Juego extends InterfaceJuego {
 	
 	Juego() {
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
-	   // this.sonido = new Herramientas("recursos/musica_fondo.aiff"); 
-	    //this.sonido.loop(); // Inicia la música en loop
+	    this.sonido = new Herramientas("recursos/musica_fondo.aiff"); 
+	    this.sonido.loop(); // Inicia la música en loop
 		this.tiempo = new Tiempo(entorno); // Inicializa el tiempo
 	    inicializarJuego();
 	    this.entorno.iniciar();
@@ -365,13 +365,24 @@ public class Juego extends InterfaceJuego {
 		                pep.incrementarKills();
 		            }
 		        }
-
+		        // Comprobar colisión con gnomos dorados
+		        Gnomos gnomoDoradoColisionado = tortugas[j].colisionaConGnomo(gnomoDorado);
+		        if (gnomoDoradoColisionado != null) {
+		            // Elimina el gnomo que fue impactado por la tortuga
+		            for (int k = 0; k < gnomoDorado.length; k++) {
+		                if (gnomoDorado[k] == gnomoDoradoColisionado ) {
+		                    gnomoDorado[k] = null; // Elimina el gnomo que colisionó
+		                    break; // Sale del bucle una vez que se elimina el gnomo
+		                }
+		            }
+		        }
+		        
 		        // Comprobar colisión con gnomos
 		        Gnomos gnomoColisionado = tortugas[j].colisionaConGnomo(gnomo);
 		        if (gnomoColisionado != null) {
 		            // Elimina el gnomo que fue impactado por la tortuga
 		            for (int k = 0; k < gnomo.length; k++) {
-		                if (gnomo[k] == gnomoColisionado) {
+		                if (gnomo[k] == gnomoColisionado ) {
 		                    gnomo[k] = null; // Elimina el gnomo que colisionó
 		                    break; // Sale del bucle una vez que se elimina el gnomo
 		                }
@@ -379,7 +390,7 @@ public class Juego extends InterfaceJuego {
 		        }
 		    }
 		}
-	 }
+}
 		              
 	
 
