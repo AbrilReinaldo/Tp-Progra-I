@@ -14,6 +14,7 @@ public class Juego extends InterfaceJuego {
 	private Herramientas sonido; // Declaración de la clase Sonido
 	private Islas[] islas;
 	private Gnomos[] gnomo;
+	private Gnomos[] gnomoDorado;
 	private Tortuga[] tortugas;
 	private Pep pep;
 	private Casa casa;
@@ -26,7 +27,9 @@ public class Juego extends InterfaceJuego {
 	private DisparoPep disparo;
 	private Boolean derecha = false;
 	private int timerGnomos = 0;
+	private int timerGnomosD = 0;
 	private int gnomosVivos = 1;
+	private int gnomosVivosDorados = 0;
 	private int timerTortugas = 0;
 	private int tiempoSpawnTortugas = 300;
 	private Boolean estaCayendo = false;
@@ -57,6 +60,7 @@ public class Juego extends InterfaceJuego {
 		this.pep = new Pep(entorno.ancho() / 2, entorno.alto() - 160, 25, 40, 3);
 		tortugas = new Tortuga[4];
 		gnomo = new Gnomos[12]; // Inicializa el array de gnomos
+		gnomoDorado = new Gnomos[12];
 
 		double x = entorno.ancho() - 380; // Definimos la posición inicial en el eje X para todos los gnomos
 		double y = entorno.alto() - 515; // Posición inicial en el eje Y
@@ -93,7 +97,6 @@ public class Juego extends InterfaceJuego {
 		fondo = Herramientas.cargarImagen("recursos/fondo.jpg");
 		menu = Herramientas.cargarImagen("recursos/menu.png");
 		gameOver = Herramientas.cargarImagen("recursos/gameOver.png");
-		
 		
 	}
  
@@ -238,8 +241,20 @@ public class Juego extends InterfaceJuego {
 		        }
 		    }
 		}
-
-
+		//pep coalicion con gnomo dorado
+		if (pep.colisionaGnomo(gnomoDorado) != null && pep.pepPuedeSalvar() ) { // 
+			//cantidad maxima de vidas que puede tener: 4
+			if(pep.getVidas() <= 3) {
+			  pep.setVidas(pep.getVidas() + 1); // aumenta una vida
+			  cooldownVidas = true;
+			  timerVidas = 0;
+			} 
+			for (int i = 0; i < gnomoDorado.length; i++) {
+		        if (gnomoDorado[i] == pep.colisionaGnomo(gnomoDorado)) {
+		            gnomoDorado[i] = null; // Borra el gnomo
+		            return; // Sale del bucle una vez que lo ha encontrado
+		        }}
+		}
 		// Spawneo de gnomos
 		timerGnomos++;
 		if (timerGnomos >= 400 && gnomosVivos < 12) {
@@ -255,7 +270,23 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
-
+		
+		// Spawneo de gnomosDorados
+				timerGnomosD++;
+				if (timerGnomosD >= 1000 && gnomosVivosDorados < 3) {
+					for (int i = 0; i < gnomo.length; i++) {
+						if (gnomoDorado[i] == null) {
+							double x = entorno.ancho() - 380;
+							double y = entorno.alto() - 505;
+							gnomoDorado[i] = new Gnomos(x, y, 10, 10,1);
+							gnomosVivosDorados++;
+							timerGnomosD = 0;
+							//System.out.println("Gnomo creado en posición " + i);
+							return;
+						}
+					}
+				}
+				
 		// Movimiento de gnomos
 		for (int j = 0; j < gnomo.length; j++) {
 			if (gnomo[j] != null) {
@@ -270,6 +301,19 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 
+		// Movimiento de gnomosDorados
+		for (int j = 0; j < gnomoDorado.length; j++) {
+			if (gnomoDorado[j] != null) {
+				gnomoDorado[j].dibujarGnomosDorados(entorno);
+				gnomoDorado[j].mover(entorno);
+				if (!gnomoDorado[j].colisionaAbajoGnomo(islas)) {
+					gnomoDorado[j].caer();
+				}
+				if (gnomoDorado[j].colisionaAbajoGnomo(islas)) {
+					gnomoDorado[j].cambioDireccion();
+				}
+			}
+		}
 		// Spawneo de tortugas
 		timerTortugas++;
 		if (timerTortugas >= tiempoSpawnTortugas && tortugasVivas < tortugas.length) {

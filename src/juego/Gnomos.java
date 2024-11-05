@@ -20,6 +20,8 @@ public class Gnomos {
 	private Boolean seCayo;
 	private Image imagenIzquierda; // Variable para la imagen del gnomo izq
 	private Image imagenDerecha;
+	private Image DoradoImagenDerecha;
+	private Image DoradoImagenIzquierda;
 
 	public Gnomos(double x, double y, int ancho, int alto, int direccion) {
 		this.x = x;
@@ -34,6 +36,8 @@ public class Gnomos {
 		this.seCayo = false;
 		this.imagenIzquierda = Herramientas.cargarImagen("gnomoIzq.png"); // Carga la imagen
 		this.imagenDerecha = Herramientas.cargarImagen("gnomoder.png");
+		this.DoradoImagenIzquierda = Herramientas.cargarImagen("gnomoDoradoIzq.png"); // Carga la imagen
+		this.DoradoImagenDerecha = Herramientas.cargarImagen("gnomoDoradoDer.png");
 	}
 
 	public void dibujarGnomos(Entorno entorno) {
@@ -43,7 +47,15 @@ public class Gnomos {
 			entorno.dibujarImagen(this.imagenIzquierda, this.x, this.y, 0, 0.07);
 		}
 	}
-
+	
+	public void dibujarGnomosDorados(Entorno entorno) {
+		if (this.direccion == 1) { // Derecha
+			entorno.dibujarImagen(this.DoradoImagenDerecha, this.x, this.y, 0, 0.07);
+		} else { // Izquierda
+			entorno.dibujarImagen(this.DoradoImagenIzquierda, this.x, this.y, 0, 0.07);
+		}
+	}
+	
 	public int azar(Entorno entorno) {
 		return -1 + (2 * random.nextInt());
 

@@ -19,6 +19,7 @@ public class Pep {
 	private Image img1; // Imagen para representar una vida
 	private Image img2; // Imagen para representar una vida
 	private Image img3; // Imagen para representar una vida
+	private Image img4; // Imagen para representar una vida
 	private int puntaje = 0; // Puntaje acumulado
 	private int kills = 0; // Número de enemigos eliminados
 	private int vidas = 3;
@@ -39,6 +40,7 @@ public class Pep {
 		this.img1 = Herramientas.cargarImagen("uno.png");
 		this.img2 = Herramientas.cargarImagen("dos.png");
 		this.img3 = Herramientas.cargarImagen("tres.png");
+		this.img4 = Herramientas.cargarImagen("cuatro.png");
 	}
 
 	public void dibujarPep(Entorno entorno) {
@@ -145,6 +147,9 @@ public class Pep {
 		// Dibuja la imagen de Mario en la esquina superior derecha de la pantalla
 		entorno.dibujarImagen(imagenDerecha, 70, 75, 0, 0.045);
 		// Dibuja la cantidad de vidas restantes según el valor de la variable "vidas"
+		if (vidas == 4) {
+			entorno.dibujarImagen(this.img4, 120, 77, 0, 0.045);
+		}
 		if (vidas == 3) {
 			entorno.dibujarImagen(this.img3, 120, 77, 0, 0.045);
 		}
