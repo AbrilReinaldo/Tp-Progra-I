@@ -365,31 +365,32 @@ public class Juego extends InterfaceJuego {
 		                pep.incrementarKills();
 		            }
 		        }
-		        // Comprobar colisión con gnomos dorados
-		        Gnomos gnomoDoradoColisionado = tortugas[j].colisionaConGnomo(gnomoDorado);
-		        if (gnomoDoradoColisionado != null) {
-		            // Elimina el gnomo que fue impactado por la tortuga
-		            for (int k = 0; k < gnomoDorado.length; k++) {
-		                if (gnomoDorado[k] == gnomoDoradoColisionado ) {
-		                    gnomoDorado[k] = null; // Elimina el gnomo que colisionó
-		                    break; // Sale del bucle una vez que se elimina el gnomo
-		                }
-		            }
-		        }
+		        if (tortugas[j] != null) {
+		         // Comprobar colisión con gnomos dorados
+		         Gnomos gnomoDoradoColisionado = tortugas[j].colisionaConGnomo(gnomoDorado);
+		         if (gnomoDoradoColisionado != null) {
+		             // Elimina el gnomo que fue impactado por la tortuga
+		             for (int k = 0; k < gnomoDorado.length; k++) {
+		                 if (gnomoDorado[k] == gnomoDoradoColisionado ) {
+		                     gnomoDorado[k] = null; // Elimina el gnomo que colisionó
+		                     break; // Sale del bucle una vez que se elimina el gnomo
+		                 }
+		             }
+		         }
 		        
-		        // Comprobar colisión con gnomos
-		        Gnomos gnomoColisionado = tortugas[j].colisionaConGnomo(gnomo);
-		        if (gnomoColisionado != null) {
-		            // Elimina el gnomo que fue impactado por la tortuga
-		            for (int k = 0; k < gnomo.length; k++) {
-		                if (gnomo[k] == gnomoColisionado ) {
-		                    gnomo[k] = null; // Elimina el gnomo que colisionó
-		                    break; // Sale del bucle una vez que se elimina el gnomo
-		                }
-		            }
-		        }
+		         // Comprobar colisión con gnomos
+		         Gnomos gnomoColisionado = tortugas[j].colisionaConGnomo(gnomo);
+		         if (gnomoColisionado != null) {
+		             // Elimina el gnomo que fue impactado por la tortuga
+		             for (int k = 0; k < gnomo.length; k++) {
+		                 if (gnomo[k] == gnomoColisionado ) {
+		                     gnomo[k] = null; // Elimina el gnomo que colisionó
+		                     break; // Sale del bucle una vez que se elimina el gnomo
+		                 }
+		             }
+		          }
 		    }
-		}
+		    }}
 }
 		              
 	
