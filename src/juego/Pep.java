@@ -179,6 +179,12 @@ public class Pep {
 																										// jugador
 	}
 	
+	
+	public int rescatados () {
+		return rescates;
+		
+	}
+	
 	public double getX() {
 		return x;
 	}

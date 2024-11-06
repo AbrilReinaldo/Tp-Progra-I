@@ -37,10 +37,13 @@ public class Juego extends InterfaceJuego {
 	int indicePosiciones = 0;
 	private boolean cooldownVidas;
 	private int timerVidas = 0;
-	private Image fondo, menu, gameOver;
+	private Image fondo, menu, gameOver,gameOver2, personajes, reglas, ganar;
 	private boolean juegoIniciado = false;
 	private Tiempo tiempo;
 	private NaveAerea naveAerea;
+	private boolean termino = false;
+
+
 
 	Juego() {
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
@@ -95,6 +98,10 @@ public class Juego extends InterfaceJuego {
 		fondo = Herramientas.cargarImagen("recursos/fondo.jpg");
 		menu = Herramientas.cargarImagen("recursos/menu.png");
 		gameOver = Herramientas.cargarImagen("recursos/gameOver.png");
+		gameOver2 = Herramientas.cargarImagen("recursos/gameOver2.png");
+		personajes = Herramientas.cargarImagen("recursos/personajes.png");
+		reglas = Herramientas.cargarImagen("recursos/reglas.png");
+		ganar = Herramientas.cargarImagen("recursos/ganar.png");
 
 	}
 
@@ -102,31 +109,47 @@ public class Juego extends InterfaceJuego {
 		entorno.cambiarFont("Arial", 25, Color.white);
 		entorno.escribirTexto("Gnomos perdidos: " + ContGnomosPerdidos, entorno.ancho() - 263, entorno.alto() - 70);
 	}
+	
 
 	public void tick() {
 		if (!juegoIniciado) {
 			entorno.dibujarImagen(menu, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
 			if (entorno.mouseX() >= 305 && entorno.mouseX() <= 495 && entorno.mouseY() >= 420
-					&& entorno.mouseY() <= 500)// si el mouse esta ubicado en el boton
+					&& entorno.mouseY() <= 500){// si el mouse esta ubicado en el boton
 				if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {// si el click del mouse fue apretado
 					juegoIniciado = true; // Inicia el juego si se presiona el espacio
-				}
+				}}
+		 // para que si esta parado el mouse en esas coordenadas muestre a los personajes
+			if (entorno.mouseX() >= 0 && entorno.mouseX() <= 100 && entorno.mouseY() >= 550
+					&& entorno.mouseY() <= 600){
+				entorno.dibujarImagen(personajes, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+			  }
+			
+			// para que si esta parado el mouse en esas coordenadas muestre las reglas
+			if (entorno.mouseX() >= 700 && entorno.mouseX() <= 800 && entorno.mouseY() >= 550
+					&& entorno.mouseY() <= 600){
+				entorno.dibujarImagen(reglas, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+
+			  }
+		
 			return;
+			
 		}
-	
 		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
 		tiempo.dibujarTiempo();
-
+		
 		// Verifica que pep este vivo, si no esta, pasa a la pantalla de GameOver
 		if (pep == null) {
 			entorno.dibujarImagen(gameOver, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
-			if (entorno.mouseX() >= 240 && entorno.mouseX() <= 560 && entorno.mouseY() >= 550
-					&& entorno.mouseY() <= 580)// si el mouse esta ubicado en el boton
+			if (entorno.mouseX() >= 240 && entorno.mouseX() <= 560 && entorno.mouseY() >= 500
+					&& entorno.mouseY() <= 590)// si el mouse esta ubicado en el boton
 				if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {// si el click del mouse fue apretado
 					inicializarJuego();// Inicia el juego si se presiona el espacio
+					termino= false;
 				}
 			return;
 		}
+
 
 // Dibujar las islas
 		for (int i = 0; i < islas.length; i++) {
@@ -234,6 +257,18 @@ public class Juego extends InterfaceJuego {
 				pep = null; // Si pierde todas las vidas, se elimina a Pep
 			}
 		}
+		// Verifica otra vez q pep este vivo, si no esta, pasa a la pantalla de GameOver
+				if (pep == null) {
+					entorno.dibujarImagen(gameOver, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+					if (entorno.mouseX() >= 240 && entorno.mouseX() <= 560 && entorno.mouseY() >= 500
+							&& entorno.mouseY() <= 590)// si el mouse esta ubicado en el boton
+						if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {// si el click del mouse fue apretado
+							inicializarJuego();// Inicia el juego si se presiona el espacio
+							termino= false;
+						}
+					return;
+				}
+
 
 		if (cooldownVidas) {
 			timerVidas++;
@@ -252,6 +287,7 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
+
 		// pep colision con gnomo dorado
 		if (pep.colisionaGnomo(gnomoDorado) != null && pep.pepPuedeSalvar()) { //
 			// cantidad maxima de vidas que puede tener: 4
@@ -267,7 +303,6 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
-		
 //-------------------- LOGICA NAVE ----------------------//
         naveAerea.mover(entorno);
         naveAerea.dibujarNave(entorno);
@@ -300,7 +335,7 @@ public class Juego extends InterfaceJuego {
 //----------LOGICA DE GNOMOS-------------//		
 // Spawneo de gnomos
 		timerGnomos++;
-		if (timerGnomos >= 400 && gnomosVivos < 12) {
+		if (timerGnomos >= 400 && gnomosVivos < 20) {
 			for (int i = 0; i < gnomo.length; i++) {
 				if (gnomo[i] == null) {
 					double x = entorno.ancho() - 380;
@@ -308,7 +343,7 @@ public class Juego extends InterfaceJuego {
 					gnomo[i] = new Gnomos(x, y, 10, 10, 1);
 					gnomosVivos++;
 					timerGnomos = 0;
-					System.out.println("Gnomo creado en posición " + i);
+					//System.out.println("Gnomo creado en posición " + i);
 					return;
 				}
 			}
@@ -357,6 +392,9 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 		mostrarPerdidos(entorno);
+
+		
+		
 //-----------------LOGICA DE TORTUGAS-----------------------		
 // Spawneo de tortugas
 		timerTortugas++;
@@ -379,7 +417,7 @@ public class Juego extends InterfaceJuego {
 					for (int i = 0; i < tortugas.length; i++) {
 						if (tortugas[i] == null) {
 							tortugas[i] = new Tortuga(xAleatorio, yInicial, 30, 30, 0.5);
-							System.out.println("Tortuga creada en posición X: " + xAleatorio + ", Y: " + yInicial);
+							//System.out.println("Tortuga creada en posición X: " + xAleatorio + ", Y: " + yInicial);
 							tortugasVivas++;
 							timerTortugas = 0;
 							return;
@@ -449,6 +487,14 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
+
+		if(ContGnomosPerdidos == 10) {
+			entorno.dibujarImagen(gameOver2, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+		}
+		if(pep.rescatados()== 10) {
+			entorno.dibujarImagen(ganar, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
+		}
+
 	}
 
 	@SuppressWarnings("unused")
