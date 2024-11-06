@@ -40,6 +40,7 @@ public class Juego extends InterfaceJuego {
 	private Image fondo, menu, gameOver;
 	private boolean juegoIniciado = false;
 	private Tiempo tiempo;
+	private NaveAerea naveAerea;
 
 	Juego() {
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
@@ -52,12 +53,12 @@ public class Juego extends InterfaceJuego {
 	}
 
 	private void inicializarJuego() {
-		// this.menu = new Menu(415, 85, 800, 600);
 		this.casa = new Casa(415, 85, 25, 30);
-		this.pep = new Pep(entorno.ancho() / 2, entorno.alto() - 160, 25, 40, 3);
+		this.pep = new Pep(entorno.ancho() / 2, entorno.alto() - 160, 25, 40, 1);
 		tortugas = new Tortuga[4];
-		gnomo = new Gnomos[12]; // Inicializa el array de gnomos
-		gnomoDorado = new Gnomos[12];
+		gnomo = new Gnomos[24]; // Inicializa el array de gnomos
+		gnomoDorado = new Gnomos[6];
+		this.naveAerea = new NaveAerea (50, entorno.alto()-30, 25, 40, 2);
 
 		double x = entorno.ancho() - 380; // Definimos la posición inicial en el eje X para todos los gnomos
 		double y = entorno.alto() - 515; // Posición inicial en el eje Y
@@ -79,7 +80,7 @@ public class Juego extends InterfaceJuego {
 
 		}
 		// otras variables
-		gnomo[0] = new Gnomos(x, y, 10, 10, 1);
+		gnomo[0] = new Gnomos(x, y, 10, 10, 2);
 		gnomosVivos = 0;
 		puedeCaer = false;
 		saltoCooldown = false;
@@ -112,7 +113,7 @@ public class Juego extends InterfaceJuego {
 				}
 			return;
 		}
-
+	
 		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0, 1);
 		tiempo.dibujarTiempo();
 
@@ -127,14 +128,16 @@ public class Juego extends InterfaceJuego {
 			return;
 		}
 
-		// Dibujar las islas
+// Dibujar las islas
 		for (int i = 0; i < islas.length; i++) {
 			if (islas[i] != null) {
 				islas[i].dibujarIslas(entorno);
 			}
 		}
 
-		// Chequea si Pep está tocando una isla
+//------------- LOGICA DE PEP---------------		
+
+// Chequea si Pep está tocando una isla
 		if (pep != null && pep.colisionaAbajoPep(islas)) {
 			puedeCaer = false;
 			puedeSaltar = true; // Puede saltar solo cuando está tocando una isla
@@ -200,8 +203,7 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 		pep.dibujarPep(entorno);
-		casa.dibujarCasa(entorno);
-
+		casa.dibujarCasa(entorno);	
 		// Mostrar puntaje y vidas de Pep
 		if (pep != null) {
 			pep.mostrarKills(entorno);
@@ -235,7 +237,7 @@ public class Juego extends InterfaceJuego {
 
 		if (cooldownVidas) {
 			timerVidas++;
-			if (timerVidas >= 100) { // Ajusta el tiempo de cooldown si es necesario
+			if (timerVidas >= 200) { // Ajustar el tiempo de cooldown si es necesario
 				cooldownVidas = false;
 			}
 		}
@@ -250,7 +252,7 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
-		// pep coalicion con gnomo dorado
+		// pep colision con gnomo dorado
 		if (pep.colisionaGnomo(gnomoDorado) != null && pep.pepPuedeSalvar()) { //
 			// cantidad maxima de vidas que puede tener: 4
 			if (pep.getVidas() <= 3) {
@@ -265,7 +267,38 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
-		// Spawneo de gnomos
+		
+//-------------------- LOGICA NAVE ----------------------//
+        naveAerea.mover(entorno);
+        naveAerea.dibujarNave(entorno);
+        
+       if(naveAerea.colisionaGnomo(gnomo)!= null) {
+    	   pep.incrementarRescates();
+    	   for (int i = 0; i < gnomo.length; i++) {
+				if (gnomo[i] == naveAerea.colisionaGnomo(gnomo)) {
+					gnomo[i] = null; // Borra el gnomo rescatado
+					return; // Sale del bucle una vez que lo ha encontrado
+				}
+			}
+		}
+       if(naveAerea.colisionaGnomo(gnomo)!= null) {
+    	   pep.incrementarRescates();
+    	   for (int i = 0; i < gnomo.length; i++) {
+				if (gnomo[i] == naveAerea.colisionaGnomo(gnomo)) {
+					gnomo[i] = null; // Borra el gnomo rescatado
+					return; // Sale del bucle una vez que lo ha encontrado
+				}
+			}
+		}
+       if(naveAerea.colisionaPep(pep)) {
+			pep.setX(entorno.ancho() / 2);
+			pep.setY(entorno.alto() - 160);
+			cooldownVidas = true;
+			timerVidas = 0;			
+       }
+       
+//----------LOGICA DE GNOMOS-------------//		
+// Spawneo de gnomos
 		timerGnomos++;
 		if (timerGnomos >= 400 && gnomosVivos < 12) {
 			for (int i = 0; i < gnomo.length; i++) {
@@ -280,7 +313,6 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 		}
-
 		// Spawneo de gnomosDorados
 		timerGnomosD++;
 		if (timerGnomosD >= 1000 && gnomosVivosDorados < 3) {
@@ -325,7 +357,8 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 		mostrarPerdidos(entorno);
-		// Spawneo de tortugas
+//-----------------LOGICA DE TORTUGAS-----------------------		
+// Spawneo de tortugas
 		timerTortugas++;
 		if (timerTortugas >= tiempoSpawnTortugas && tortugasVivas < tortugas.length) {
 			double[] posicionesIslasX = new double[islas.length];

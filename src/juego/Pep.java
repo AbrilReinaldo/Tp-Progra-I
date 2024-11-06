@@ -178,13 +178,7 @@ public class Pep {
 																										// puntaje del
 																										// jugador
 	}
-
-	// public void mostrarGameOver(Entorno entorno) {
-	// entorno.cambiarFont("Arial", 25, Color.white);
-	// entorno.escribirTexto("GAME OVER", entorno.ancho() - 480, entorno.alto() /
-	// 2);
-	// }
-
+	
 	public double getX() {
 		return x;
 	}

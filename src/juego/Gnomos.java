@@ -54,7 +54,7 @@ public class Gnomos {
 			entorno.dibujarImagen(this.DoradoImagenIzquierda, this.x, this.y, 0, 0.07);
 		}
 	}
-
+	
 	public int azar(Entorno entorno) {
 		return -1 + (2 * random.nextInt());
 
@@ -113,6 +113,8 @@ public class Gnomos {
 		}
 		return false; // No hay colisión
 	}
+	
+	
 
 	public double getX() {
 		return x;
